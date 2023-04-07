@@ -7,7 +7,11 @@ public class AustraliaBoardField {
 
 	private String name;
 
+	private FIELD_TYPE fieldType;
+	private COLOR_CODE colorCode;
+	
 	private int value;
+	
 	private int sameColorCount;
 
 	private int priceHouseAndHotel;
@@ -24,9 +28,11 @@ public class AustraliaBoardField {
 	private int currentRent;
 	private Player currentOwner;
 	
-	public AustraliaBoardField(String name, int value, int sameColorCount, int priceHouseAndHotel, int rentSolo,
+	public AustraliaBoardField(String name, FIELD_TYPE fieldType, COLOR_CODE colorCode, int value, int sameColorCount, int priceHouseAndHotel, int rentSolo,
 			int rentAllColor, int rentHouse1, int rentHouse2, int rentHouse3, int rentHouse4, int rentHotel) {
 		this.name = name;
+		this.fieldType = fieldType;
+		this.colorCode = colorCode;
 		this.value = value;
 		this.sameColorCount = sameColorCount;
 		this.priceHouseAndHotel = priceHouseAndHotel;
@@ -43,6 +49,10 @@ public class AustraliaBoardField {
 
 	public String getName() {
 		return name;
+	}
+
+	public FIELD_TYPE getFieldType() {
+		return fieldType;
 	}
 
 	public int getValue() {
@@ -93,6 +103,33 @@ public class AustraliaBoardField {
 	
 	private boolean allColorsHaveSameOwner(List<AustraliaBoardField> allFields) {
 		return allFields.stream()
-			.filter(field -> field.currentOwner == currentOwner).count() == sameColorCount;
+			.filter(field -> 
+				(   field.currentOwner == currentOwner)
+				 && field.colorCode    == colorCode)
+			.count() == sameColorCount;
+	}
+	
+	public enum FIELD_TYPE {
+		START,
+		LOCATION,
+		AIRPORT,
+		WORKS,
+		PAY_TAX,
+		CHANCE,
+		COMMUNITY_CHEST,
+		FREE_PARKING,
+		VISITING_JAIL,
+		GO_TO_JAIL
+	}
+	
+	public enum COLOR_CODE {
+		BROWN,
+		LIGHT_BLUE,
+		PINK,
+		ORANGE,
+		RED,
+		YELLOW,
+		GREEN,
+		DARK_BLUE
 	}
 }

@@ -18,18 +18,18 @@ public class Player {
 		return balance;
 	}
 
-	public int getPayedRent(final int amount) {
-		balance += amount;
+	public int getPayedRentForProperty(final AustraliaBoardField field) {
+		balance += field.getCurrentRent();
 		return balance;
 	}
 
-	public int payRent(final int amount) {
-		balance -= amount;
+	public int payRentForProperty(final AustraliaBoardField field) {
+		balance -= field.getCurrentRent();
 		return balance;
 	}
 	
-	public int payHouseOrHotel(final int amount) {
-		balance -= amount;
+	public int payHouseOrHotelForProperty(final AustraliaBoardField field) {
+		balance -= field.getPriceHouseAndHotel();
 		return balance;
 	}
 	
