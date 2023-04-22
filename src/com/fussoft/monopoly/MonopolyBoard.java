@@ -9,4 +9,8 @@ public interface MonopolyBoard {
 	int getMaxFieldIndex();
 	
 	boolean checkForAllPropertiesSold();
+
+	int getGoToJailIndex();
+
+	int getJailIndex();
 }

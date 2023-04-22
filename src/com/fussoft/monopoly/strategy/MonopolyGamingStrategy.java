@@ -4,6 +4,7 @@ import com.fussoft.monopoly.MonopolyBoard;
 import com.fussoft.monopoly.MonopolyBoardField;
 import com.fussoft.monopoly.Player;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public abstract class MonopolyGamingStrategy {
@@ -22,9 +23,20 @@ public abstract class MonopolyGamingStrategy {
 		while (!allPropertiesSold && (round < MAX_ROUNDS)) {
 			System.out.println("\n++++Starting round " + round);
 			for (int playerNumber = 0; playerNumber < players.length; playerNumber++) {
-				int diceValue = roleTheDice();
 				
-				int newPosition = players[playerNumber].moveSteps(diceValue, board.getMaxFieldIndex());
+				int diceValue = roleTheDice();
+				if (players[playerNumber].isInJail()) {
+					diceValue = threeTimesChanceToRollADouble(diceValue);
+					if (diceValue % 2 != 0) {
+						// not coming out of jail
+						System.out.println("Player '" + players[playerNumber].getName() + "' stays in jail");
+						continue;
+					} else {
+						System.out.println("Player '" + players[playerNumber].getName() + "' comes out of jail");
+					}
+				}
+				
+				int newPosition = players[playerNumber].moveSteps(diceValue, board.getMaxFieldIndex(), board.getGoToJailIndex(), board.getJailIndex());
 				
 				final MonopolyBoardField boardField = board.getFieldAtIndex(newPosition);
 				
@@ -57,8 +69,23 @@ public abstract class MonopolyGamingStrategy {
 			
 			round++;
 		}
+		Arrays.asList(board.getAllFields()).stream()
+		.filter(field -> field.isPurchasable())
+		.forEach(field -> {
+			System.out.println("Field: '" + field.getName() + "' is owned by '" + field.getCurrentOwner().getName() + "'.");
+		});
 	}
 	
+	private int threeTimesChanceToRollADouble(int diceValue) {
+		int newDiceValue = diceValue;
+		int tryCount = 1;
+		while (newDiceValue % 2 != 0 && tryCount++ < 3) {
+			newDiceValue = roleTheDice();
+		}
+		return newDiceValue;
+	}
+
+
 	protected void initPlayers(Player[] players) {
 		for (int playerNumber = 0; playerNumber < players.length; playerNumber++) {
 			players[playerNumber] = new Player("Player-" + playerNumber, 1500);

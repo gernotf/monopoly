@@ -102,6 +102,7 @@ public class AustraliaBoardField implements MonopolyBoardField {
 			if (currentRent == 0) {
 				currentRent = rentSolo;
 			} else if (allColorsHaveSameOwner(Arrays.asList(allFields))) {
+				System.out.println(">>>Player '" + newOwner.getName() + "' now owns all '" + colorCode + "' fields.");
 				currentRent = rentAllColor;
 			}
 		}

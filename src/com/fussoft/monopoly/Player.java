@@ -5,11 +5,13 @@ public class Player {
 	private String name;
 	private int balance;
 	private int boardPosition;
+	private boolean isInJail;
 	
 	public Player (String name, int initialBalance) {
 		this.name = name;
 		this.balance = initialBalance;
 		this.boardPosition = 0;
+		this.isInJail = false;
 	}
 	
 	public String getName() {
@@ -23,13 +25,24 @@ public class Player {
 	public int getBoardPosition() {
 		return boardPosition;
 	}
+	
+	public boolean isInJail() {
+		return isInJail;
+	}
 
-	public int moveSteps(final int steps, final int maxFieldIndex) {
+	public int moveSteps(final int steps, final int maxFieldIndex, final int goToJailIndex, final int jailIndex) {
+		// player is allowed to move, so their couldn't be in jail
+		isInJail = false;
 		boardPosition+=steps;
 		if (boardPosition > maxFieldIndex) {
 			System.out.println("Player '" + this.name + "' crossed the START field.");
 			boardPosition -= maxFieldIndex;
 			balance += 200;
+		}
+		if (boardPosition == goToJailIndex) {
+			boardPosition = jailIndex;
+			isInJail = true;
+			System.out.println("Player '" + this.name + "' goes to jail.");
 		}
 		return boardPosition;
 	}

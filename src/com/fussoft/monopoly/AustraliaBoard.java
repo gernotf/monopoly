@@ -687,4 +687,14 @@ public class AustraliaBoard implements MonopolyBoard {
 		return soldFields == purchasableFields;
 	}
 
+	@Override
+	public int getGoToJailIndex() {
+		return 30;
+	}
+
+	@Override
+	public int getJailIndex() {
+		return 10;
+	}
+
 }
