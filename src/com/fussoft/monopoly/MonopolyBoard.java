@@ -7,4 +7,6 @@ public interface MonopolyBoard {
 	MonopolyBoardField[] getAllFields();
 	
 	int getMaxFieldIndex();
+	
+	boolean checkForAllPropertiesSold();
 }

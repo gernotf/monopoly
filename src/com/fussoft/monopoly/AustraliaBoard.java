@@ -1,11 +1,16 @@
 package com.fussoft.monopoly;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.fussoft.monopoly.MonopolyBoardField.COLOR_CODE;
 import com.fussoft.monopoly.MonopolyBoardField.FIELD_TYPE;
 
 public class AustraliaBoard implements MonopolyBoard {
 	
 	static final AustraliaBoardField[] FIELDS = new AustraliaBoardField[40];
+	
+	private int purchasableFields;
 	
 	static {
 		FIELDS[0] = new AustraliaBoardField(
@@ -249,7 +254,7 @@ public class AustraliaBoard implements MonopolyBoard {
 			);
 
 		FIELDS[15] = new AustraliaBoardField(
-				"Brisban Airport",
+				"Brisbane Airport",
 				FIELD_TYPE.AIRPORT,
 				null,
 				200, //value
@@ -647,8 +652,18 @@ public class AustraliaBoard implements MonopolyBoard {
 				0, //rentHouse4
 				0  //rentHotel
 			);
+		
 	}
 
+	public AustraliaBoard() {
+		purchasableFields = (int) Arrays.asList(FIELDS)
+				.stream()
+				.filter(field -> (field.getFieldType() == FIELD_TYPE.AIRPORT || field.getFieldType() == FIELD_TYPE.LOCATION || field.getFieldType() == FIELD_TYPE.WORKS))
+				.count();
+		
+		System.out.println("Purchasable fields for this board: " + purchasableFields);
+	}
+	
 	@Override
 	public MonopolyBoardField[] getAllFields() {
 		return FIELDS;
@@ -659,7 +674,17 @@ public class AustraliaBoard implements MonopolyBoard {
 	}
 
 	public int getMaxFieldIndex() {
-		return FIELDS.length;
+		return FIELDS.length - 1;
+	}
+
+	@Override
+	public boolean checkForAllPropertiesSold() {
+		int soldFields = (int) Arrays.asList(FIELDS)
+		.stream()
+		.filter((field -> field.getCurrentOwner() != null && (field.getFieldType() == FIELD_TYPE.AIRPORT || field.getFieldType() == FIELD_TYPE.LOCATION || field.getFieldType() == FIELD_TYPE.WORKS)))
+		.count();
+		System.out.println("Currently, " + soldFields + " of " + purchasableFields + " are sold");
+		return soldFields == purchasableFields;
 	}
 
 }

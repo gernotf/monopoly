@@ -5,6 +5,8 @@ import java.util.List;
 
 public class AustraliaBoardField implements MonopolyBoardField {
 
+	private static final int AIRPORT_BASE_RENT = 25;
+
 	private String name;
 
 	private FIELD_TYPE fieldType;
@@ -69,7 +71,10 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		return currentOwner;
 	}
 	
-	public int getCurrentRent() {
+	public int getCurrentRent(int diceValue, final MonopolyBoardField[] allFields) {
+		if (fieldType == FIELD_TYPE.WORKS) {
+			return getWorksFactor(Arrays.asList(allFields)) * diceValue;
+		}
 		return currentRent;
 	}
 
@@ -77,25 +82,36 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		return priceHouseAndHotel;
 	}
 
+	
+	public boolean isPurchasable() {
+		return 	   fieldType == FIELD_TYPE.AIRPORT
+				|| fieldType == FIELD_TYPE.LOCATION
+				|| fieldType == FIELD_TYPE.WORKS;
+	}
+	
 	public boolean isAvailableForPurchase() {
 		return currentOwner == null;
 	}
 	
 	public void setNewOwner(final Player newOwner, final MonopolyBoardField[] allFields) {
 		currentOwner = newOwner;
-		if (currentRent == 0) {
-			currentRent = rentSolo;
-		} else if (allColorsHaveSameOwner(Arrays.asList(allFields))) {
-			currentRent = rentAllColor;
+		currentOwner.payForProperty(this);
+		if (fieldType == FIELD_TYPE.AIRPORT) {
+			currentRent = getRentForOwnedAirports(Arrays.asList(allFields));
+		} else if (fieldType == FIELD_TYPE.LOCATION) {
+			if (currentRent == 0) {
+				currentRent = rentSolo;
+			} else if (allColorsHaveSameOwner(Arrays.asList(allFields))) {
+				currentRent = rentAllColor;
+			}
 		}
 	}
 	
-	
-	public boolean canBuyHouse(final AustraliaBoardField[] allFields) {
+	public boolean canBuyHouse(final MonopolyBoardField[] allFields) {
 		 return (currentRent > rentSolo) && (currentRent < rentHotel);
 	}
 	
-	public void buyHouseOrHotel(final AustraliaBoardField[] allFields) {
+	public void buyHouseOrHotel(final MonopolyBoardField[] allFields) {
 		if (currentRent == rentAllColor) {
 			currentRent = rentHouse1;
 		} else if (currentRent == rentHouse1) {
@@ -115,5 +131,50 @@ public class AustraliaBoardField implements MonopolyBoardField {
 				(   field.getCurrentOwner() == currentOwner)
 				 && field.getColorCode() == colorCode)
 			.count() == sameColorCount;
+	}
+
+	private int getRentForOwnedAirports(List<MonopolyBoardField> list) {
+		final long numberOfAirportsOwnedByThisOwner = list.stream()
+			.filter(field -> 
+				(   field.getCurrentOwner() == currentOwner)
+				 && field.getFieldType() == FIELD_TYPE.AIRPORT)
+			.count();
+		final int rent; 
+		if (numberOfAirportsOwnedByThisOwner > 0) {
+			rent = (int) (AIRPORT_BASE_RENT * (2 ^ (numberOfAirportsOwnedByThisOwner - 1)));
+		} else {
+			rent = 0;
+		}
+		return rent;
+	}
+	
+	private int getWorksFactor(List<MonopolyBoardField> list) {
+		final long numberOfWorksOwnedByThisOwner = list.stream()
+				.filter(field -> 
+					(   field.getCurrentOwner() == currentOwner)
+					 && field.getFieldType() == FIELD_TYPE.WORKS)
+				.count();
+		
+		final int factor;
+		if (numberOfWorksOwnedByThisOwner == 1) {
+			factor = 4;
+		} else if (numberOfWorksOwnedByThisOwner == 2) {
+			factor = 10;
+		} else {
+			factor = 0;
+		}
+		return factor;
+	}
+
+	@Override
+	public boolean canBuyHouse(AustraliaBoardField[] allFields) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void buyHouseOrHotel(AustraliaBoardField[] allFields) {
+		// TODO Auto-generated method stub
+		
 	}
 }

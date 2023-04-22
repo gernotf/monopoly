@@ -1,5 +1,7 @@
 package com.fussoft.monopoly;
 
+import java.util.List;
+
 public interface MonopolyBoardField {
 
 	String getName();
@@ -10,11 +12,13 @@ public interface MonopolyBoardField {
 
 	int getValue();
 	
- 	int getCurrentRent();
+ 	int getCurrentRent(int diceValue, final MonopolyBoardField[] allFields);
 	
 	Player getCurrentOwner();
 
 	int getPriceHouseAndHotel();
+
+	boolean isPurchasable();
 
 	boolean isAvailableForPurchase();
 	
@@ -23,8 +27,7 @@ public interface MonopolyBoardField {
 	boolean canBuyHouse(final AustraliaBoardField[] allFields);
 	
 	void buyHouseOrHotel(final AustraliaBoardField[] allFields);
-	
-
+		
 	enum FIELD_TYPE {
 		START,
 		LOCATION,
