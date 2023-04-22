@@ -649,4 +649,17 @@ public class AustraliaBoard implements MonopolyBoard {
 			);
 	}
 
+	@Override
+	public MonopolyBoardField[] getAllFields() {
+		return FIELDS;
+	}
+	
+	public MonopolyBoardField getFieldAtIndex(int fieldIndex) {
+		return FIELDS[fieldIndex];
+	}
+
+	public int getMaxFieldIndex() {
+		return FIELDS.length;
+	}
+
 }

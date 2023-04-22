@@ -10,7 +10,7 @@ public interface MonopolyBoardField {
 
 	int getValue();
 	
-	int getCurrentRent();
+ 	int getCurrentRent();
 	
 	Player getCurrentOwner();
 
@@ -18,7 +18,7 @@ public interface MonopolyBoardField {
 
 	boolean isAvailableForPurchase();
 	
-	void newOwner(final Player newOwner, final MonopolyBoardField[] allFields);
+	void setNewOwner(final Player newOwner, final MonopolyBoardField[] allFields);
 	
 	boolean canBuyHouse(final AustraliaBoardField[] allFields);
 	

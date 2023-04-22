@@ -81,7 +81,7 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		return currentOwner == null;
 	}
 	
-	public void newOwner(final Player newOwner, final MonopolyBoardField[] allFields) {
+	public void setNewOwner(final Player newOwner, final MonopolyBoardField[] allFields) {
 		currentOwner = newOwner;
 		if (currentRent == 0) {
 			currentRent = rentSolo;

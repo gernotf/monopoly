@@ -8,7 +8,7 @@ public class MonopolyApplication {
 	static final MonopolyGamingStrategy gamingStrategy = new MonopolyGamingStrategy100();
 	
 	public static void main(String[] args) {
-		gamingStrategy.playGame(new AustraliaBoard());
+		gamingStrategy.playGame(new AustraliaBoard(), 4);
 	}
 
 }
