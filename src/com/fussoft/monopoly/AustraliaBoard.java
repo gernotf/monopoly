@@ -1,9 +1,9 @@
 package com.fussoft.monopoly;
 
-import com.fussoft.monopoly.AustraliaBoardField.COLOR_CODE;
-import com.fussoft.monopoly.AustraliaBoardField.FIELD_TYPE;
+import com.fussoft.monopoly.MonopolyBoardField.COLOR_CODE;
+import com.fussoft.monopoly.MonopolyBoardField.FIELD_TYPE;
 
-public class AustraliaBoard {
+public class AustraliaBoard implements MonopolyBoard {
 	
 	static final AustraliaBoardField[] FIELDS = new AustraliaBoardField[40];
 	
