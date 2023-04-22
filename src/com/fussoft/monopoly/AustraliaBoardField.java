@@ -140,8 +140,14 @@ public class AustraliaBoardField implements MonopolyBoardField {
 				 && field.getFieldType() == FIELD_TYPE.AIRPORT)
 			.count();
 		final int rent; 
-		if (numberOfAirportsOwnedByThisOwner > 0) {
-			rent = (int) (AIRPORT_BASE_RENT * (2 ^ (numberOfAirportsOwnedByThisOwner - 1)));
+		if (numberOfAirportsOwnedByThisOwner == 1) {
+			rent = 25;
+		} else if (numberOfAirportsOwnedByThisOwner == 2) {
+			rent = 50;
+		} else if (numberOfAirportsOwnedByThisOwner == 3) {
+			rent = 100;
+		} else if (numberOfAirportsOwnedByThisOwner == 4) {
+			rent = 200;
 		} else {
 			rent = 0;
 		}
