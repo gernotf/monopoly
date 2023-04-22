@@ -116,8 +116,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				100, //value
 				3, //sameColorCount
 				50, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				6, //rentSolo
+				12, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -148,8 +148,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				100, //value
 				3, //sameColorCount
 				50, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				6, //rentSolo
+				12, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -164,8 +164,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				120, //value
 				3, //sameColorCount
 				50, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				8, //rentSolo
+				16, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -190,14 +190,14 @@ public class AustraliaBoard implements MonopolyBoard {
 			);
 
 		FIELDS[11] = new AustraliaBoardField(
-				"Margret River",
+				"Margaret River",
 				FIELD_TYPE.LOCATION,
 				COLOR_CODE.PINK,
 				140, //value
 				3, //sameColorCount
 				100, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				10, //rentSolo
+				20, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -228,8 +228,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				140, //value
 				3, //sameColorCount
 				100, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				10, //rentSolo
+				20, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -244,8 +244,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				160, //value
 				3, //sameColorCount
 				100, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				12, //rentSolo
+				24, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -276,8 +276,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				180, //value
 				3, //sameColorCount
 				100, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				14, //rentSolo
+				28, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -308,8 +308,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				180, //value
 				3, //sameColorCount
 				100, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				14, //rentSolo
+				28, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -324,8 +324,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				200, //value
 				3, //sameColorCount
 				100, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				16, //rentSolo
+				32, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -356,8 +356,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				220, //value
 				3, //sameColorCount
 				150, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				18, //rentSolo
+				36, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -388,8 +388,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				220, //value
 				3, //sameColorCount
 				150, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				18, //rentSolo
+				36, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -404,8 +404,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				240, //value
 				3, //sameColorCount
 				150, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				20, //rentSolo
+				40, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -436,8 +436,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				260, //value
 				3, //sameColorCount
 				150, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				22, //rentSolo
+				44, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -452,8 +452,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				260, //value
 				3, //sameColorCount
 				150, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				22, //rentSolo
+				44, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -484,8 +484,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				280, //value
 				3, //sameColorCount
 				150, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				24, //rentSolo
+				48, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -516,8 +516,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				300, //value
 				3, //sameColorCount
 				200, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				26, //rentSolo
+				52, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -532,8 +532,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				300, //value
 				3, //sameColorCount
 				200, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				26, //rentSolo
+				52, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -564,8 +564,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				320, //value
 				3, //sameColorCount
 				200, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				28, //rentSolo
+				56, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -612,8 +612,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				350, //value
 				2, //sameColorCount
 				200, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				35, //rentSolo
+				70, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
@@ -644,8 +644,8 @@ public class AustraliaBoard implements MonopolyBoard {
 				400, //value
 				2, //sameColorCount
 				200, //priceHouseAndHotel
-				0, //rentSolo
-				0, //rentAllColor
+				50, //rentSolo
+				100, //rentAllColor
 				0, //rentHouse1
 				0, //rentHouse2
 				0, //rentHouse3
