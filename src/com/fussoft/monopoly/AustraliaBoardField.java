@@ -183,7 +183,7 @@ public class AustraliaBoardField implements MonopolyBoardField {
 	private void setRentToAllColorRentForAllFieldsOfColor(MonopolyBoardField[] allFields) {
 		Arrays.stream(allFields)
 				.filter(field -> field.getColorCode() == colorCode)
-				.forEach(field -> field.setCurrentRentToAllColor());
+				.forEach(MonopolyBoardField::setCurrentRentToAllColor);
 	}
 
 }
