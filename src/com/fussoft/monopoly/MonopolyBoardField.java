@@ -7,13 +7,13 @@ public interface MonopolyBoardField {
 	String getName();
 
 	FIELD_TYPE getFieldType();
-	
+
 	COLOR_CODE getColorCode();
 
 	int getValue();
-	
+
  	int getCurrentRent(int diceValue, final MonopolyBoardField[] allFields);
-	
+
 	Player getCurrentOwner();
 
 	int getPriceHouseAndHotel();
@@ -21,13 +21,15 @@ public interface MonopolyBoardField {
 	boolean isPurchasable();
 
 	boolean isAvailableForPurchase();
-	
+
 	void setNewOwner(final Player newOwner, final MonopolyBoardField[] allFields);
-	
-	boolean canBuyHouse(final AustraliaBoardField[] allFields);
-	
-	void buyHouseOrHotel(final AustraliaBoardField[] allFields);
-		
+
+	public void recalculateCurrentRent(final MonopolyBoardField[] allFields);
+
+	boolean canBuyHouse();
+
+	void buyHouseOrHotel(final MonopolyBoardField[] allFields);
+
 	enum FIELD_TYPE {
 		START,
 		LOCATION,
@@ -40,7 +42,7 @@ public interface MonopolyBoardField {
 		VISITING_JAIL,
 		GO_TO_JAIL
 	}
-	
+
 	enum COLOR_CODE {
 		BROWN,
 		LIGHT_BLUE,

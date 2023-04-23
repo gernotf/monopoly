@@ -4,10 +4,7 @@ import com.fussoft.monopoly.MonopolyBoard;
 import com.fussoft.monopoly.MonopolyBoardField;
 import com.fussoft.monopoly.Player;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class MonopolyGamingStrategy {
@@ -25,28 +22,29 @@ public abstract class MonopolyGamingStrategy {
 		boolean allPropertiesSold = false;
 		while (!allPropertiesSold && (round < MAX_ROUNDS)) {
 			System.out.println("\n++++Starting round " + round);
-			for (int playerNumber = 0; playerNumber < players.length; playerNumber++) {
+
+			for (Player player : players) {
 
 				int diceValue1 = roleTheDice();
 				int diceValue2 = roleTheDice();
 
-				if (players[playerNumber].isInJail()) {
+				if (player.isInJail()) {
 					int[] doubleOrNot = threeTimesChanceToRollADouble(diceValue1, diceValue2);
 					if (doubleOrNot[0] == doubleOrNot[1]) {
-						System.out.println("Player '" + players[playerNumber].getName() + "' comes out of jail.");
+						System.out.println("Player '" + player.getName() + "' comes out of jail.");
 						diceValue1 = doubleOrNot[0];
 						diceValue2 = doubleOrNot[1];
 					} else {
 						// not coming out of jail
-						players[playerNumber].addRoundInJail();
-						System.out.println("Player '" + players[playerNumber].getName() + "' stays in jail.");
+						player.addRoundInJail();
+						System.out.println("Player '" + player.getName() + "' stays in jail.");
 						continue;
 					}
 				}
 
 				int diceValue = diceValue1 + diceValue2;
 
-				int newPosition = players[playerNumber].moveSteps(diceValue, board.getMaxFieldIndex(), board.getGoToJailIndex(), board.getJailIndex());
+				int newPosition = player.moveSteps(diceValue, board.getMaxFieldIndex(), board.getGoToJailIndex(), board.getJailIndex());
 
 				final MonopolyBoardField boardField = board.getFieldAtIndex(newPosition);
 
@@ -55,26 +53,23 @@ public abstract class MonopolyGamingStrategy {
 					continue;
 				}
 
-				if (boardField.getCurrentOwner() == players[playerNumber]) {
+				if (boardField.getCurrentOwner() == player) {
 					// player returned to their own property - no action (for now)
 					continue;
 				}
 				if (boardField.isAvailableForPurchase()) {
-					if (players[playerNumber].getBalance() - boardField.getValue() >= getMinBalance()) {
-						boardField.setNewOwner(players[playerNumber], board.getAllFields());
-						System.out.println("Field '" + boardField.getName() + "'(" + boardField.getValue() + ") was purchased by '" + players[playerNumber].getName() + "', remaining balance: " + players[playerNumber].getBalance());
+					if (player.getBalance() - boardField.getValue() >= getMinBalance()) {
+						boardField.setNewOwner(player, board.getAllFields());
+						System.out.println("Field '" + boardField.getName() + "'(" + boardField.getValue() + ") was purchased by '" + player.getName() + "', remaining balance: " + player.getBalance());
 					} else {
-						System.out.println("Field '" + boardField.getName() + "'(" + boardField.getValue() + ") was NOT purchased by '" + players[playerNumber].getName() + "' with balance of " + players[playerNumber].getBalance());
+						System.out.println("Field '" + boardField.getName() + "'(" + boardField.getValue() + ") was NOT purchased by '" + player.getName() + "' with balance of " + player.getBalance());
 					}
 				} else {
-					players[playerNumber].payRentForProperty(boardField, diceValue, board.getAllFields());
+					player.payRentForProperty(boardField, diceValue, board.getAllFields());
 					boardField.getCurrentOwner().getPayedRentForProperty(boardField, diceValue, board.getAllFields());
-					System.out.println("Player '" + players[playerNumber].getName() + "'(" + players[playerNumber].getBalance() + ") payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + boardField.getCurrentRent(diceValue, board.getAllFields()) + ")");
+					System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + boardField.getCurrentRent(diceValue, board.getAllFields()) + ")");
 				}
 				allPropertiesSold = board.checkForAllPropertiesSold();
-				if (allPropertiesSold) {
-					break;
-				}
 			}
 
 			round++;
@@ -106,15 +101,26 @@ public abstract class MonopolyGamingStrategy {
 
 	private void printGameResults(final MonopolyBoard board, final Player[] players) {
 		Arrays.stream(board.getAllFields())
-		.filter(MonopolyBoardField::isPurchasable)
-		.forEach(field -> {
-			System.out.println("Field: '" + field.getName() + "' is owned by '" + field.getCurrentOwner().getName() + "'.");
-		});
-		Arrays.stream(players)
-		.forEach(player -> {
-			System.out.println("Player: '" + player.getName() + "' owns " + getFieldsOwnedByPlayer(player, board).size() + " fields, has " + player.getBalance() + " money left and spent " + player.getRoundsInJail() + " rounds in jail.");
-		});
+			.filter(MonopolyBoardField::isPurchasable)
+			.forEach(field -> {
+				System.out.println("Field: '" + field.getName() + "' is owned by '" + field.getCurrentOwner().getName() + "'.");
+			});
 
+		Arrays.stream(players)
+			.forEach(player -> {
+				System.out.println("Player: '" + player.getName() + "' owns " + getFieldsOwnedByPlayer(player, board).size() + " fields, has " + player.getBalance() + " money left and spent " + player.getRoundsInJail() + " rounds in jail.");
+			});
+
+		final List<MonopolyBoardField.COLOR_CODE> foundColorCodes = new ArrayList<>();
+		Arrays.stream(board.getAllFields())
+				.filter(field -> field.canBuyHouse() && !foundColorCodes.contains(field.getColorCode()))
+//				.map(field -> {
+//					foundColorCodes.add(field.getColorCode());
+//					return field;
+//				})
+				.forEach(field -> {
+					System.out.println("Fields of color: '" + field.getColorCode() + "' are all owned by '" + field.getCurrentOwner().getName() + "'.");
+				});
 	}
 
 
