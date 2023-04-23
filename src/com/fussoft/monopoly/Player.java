@@ -6,12 +6,15 @@ public class Player {
 	private int balance;
 	private int boardPosition;
 	private boolean isInJail;
+
+	private int roundsInJail;
 	
 	public Player (String name, int initialBalance) {
 		this.name = name;
 		this.balance = initialBalance;
 		this.boardPosition = 0;
 		this.isInJail = false;
+		this.roundsInJail = 0;
 	}
 	
 	public String getName() {
@@ -30,6 +33,14 @@ public class Player {
 		return isInJail;
 	}
 
+	public int getRoundsInJail() {
+		return roundsInJail;
+	}
+	
+	public void addRoundInJail() {
+		this.roundsInJail++;
+	}
+
 	public int moveSteps(final int steps, final int maxFieldIndex, final int goToJailIndex, final int jailIndex) {
 		// player is allowed to move, so their couldn't be in jail
 		isInJail = false;
@@ -42,6 +53,7 @@ public class Player {
 		if (boardPosition == goToJailIndex) {
 			boardPosition = jailIndex;
 			isInJail = true;
+			roundsInJail++;
 			System.out.println("Player '" + this.name + "' goes to jail.");
 		}
 		return boardPosition;
