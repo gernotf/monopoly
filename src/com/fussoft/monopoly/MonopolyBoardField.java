@@ -26,6 +26,8 @@ public interface MonopolyBoardField {
 
 	public void recalculateCurrentRent(final MonopolyBoardField[] allFields);
 
+	public void setCurrentRentToAllColor();
+
 	boolean canBuyHouse();
 
 	void buyHouseOrHotel(final MonopolyBoardField[] allFields);

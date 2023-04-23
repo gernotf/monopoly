@@ -114,10 +114,10 @@ public abstract class MonopolyGamingStrategy {
 		final List<MonopolyBoardField.COLOR_CODE> foundColorCodes = new ArrayList<>();
 		Arrays.stream(board.getAllFields())
 				.filter(field -> field.canBuyHouse() && !foundColorCodes.contains(field.getColorCode()))
-//				.map(field -> {
-//					foundColorCodes.add(field.getColorCode());
-//					return field;
-//				})
+				.map(field -> {
+					foundColorCodes.add(field.getColorCode());
+					return field;
+				})
 				.forEach(field -> {
 					System.out.println("Fields of color: '" + field.getColorCode() + "' are all owned by '" + field.getCurrentOwner().getName() + "'.");
 				});

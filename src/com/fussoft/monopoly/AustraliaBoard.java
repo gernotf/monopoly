@@ -38,11 +38,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				50, //priceHouseAndHotel
 				2, //rentSolo
 				4, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				10, //rentHouse1
+				30, //rentHouse2
+				90, //rentHouse3
+				160, //rentHouse4
+				250  //rentHotel
 			);
 
 		FIELDS[2] = new AustraliaBoardField(
@@ -70,11 +70,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				50, //priceHouseAndHotel
 				4, //rentSolo
 				8, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				20, //rentHouse1
+				60, //rentHouse2
+				180, //rentHouse3
+				320, //rentHouse4
+				450  //rentHotel
 			);
 
 		FIELDS[4] = new AustraliaBoardField(
@@ -118,11 +118,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				50, //priceHouseAndHotel
 				6, //rentSolo
 				12, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				30, //rentHouse1
+				90, //rentHouse2
+				270, //rentHouse3
+				400, //rentHouse4
+				550  //rentHotel
 			);
 
 		FIELDS[7] = new AustraliaBoardField(
@@ -150,11 +150,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				50, //priceHouseAndHotel
 				6, //rentSolo
 				12, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				30, //rentHouse1
+				90, //rentHouse2
+				270, //rentHouse3
+				400, //rentHouse4
+				550  //rentHotel
 			);
 
 		FIELDS[9] = new AustraliaBoardField(
@@ -166,11 +166,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				50, //priceHouseAndHotel
 				8, //rentSolo
 				16, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				40, //rentHouse1
+				100, //rentHouse2
+				300, //rentHouse3
+				450, //rentHouse4
+				600  //rentHotel
 			);
 
 		FIELDS[10] = new AustraliaBoardField(
@@ -198,11 +198,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				100, //priceHouseAndHotel
 				10, //rentSolo
 				20, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				50, //rentHouse1
+				150, //rentHouse2
+				450, //rentHouse3
+				625, //rentHouse4
+				750  //rentHotel
 			);
 
 		FIELDS[12] = new AustraliaBoardField(
@@ -230,11 +230,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				100, //priceHouseAndHotel
 				10, //rentSolo
 				20, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				50, //rentHouse1
+				150, //rentHouse2
+				450, //rentHouse3
+				625, //rentHouse4
+				750  //rentHotel
 			);
 
 		FIELDS[14] = new AustraliaBoardField(
@@ -246,11 +246,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				100, //priceHouseAndHotel
 				12, //rentSolo
 				24, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				60, //rentHouse1
+				180, //rentHouse2
+				500, //rentHouse3
+				700, //rentHouse4
+				900  //rentHotel
 			);
 
 		FIELDS[15] = new AustraliaBoardField(
@@ -278,11 +278,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				100, //priceHouseAndHotel
 				14, //rentSolo
 				28, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				70, //rentHouse1
+				200, //rentHouse2
+				550, //rentHouse3
+				750, //rentHouse4
+				950  //rentHotel
 			);
 
 		FIELDS[17] = new AustraliaBoardField(
@@ -310,11 +310,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				100, //priceHouseAndHotel
 				14, //rentSolo
 				28, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				70, //rentHouse1
+				200, //rentHouse2
+				550, //rentHouse3
+				750, //rentHouse4
+				950  //rentHotel
 			);
 
 		FIELDS[19] = new AustraliaBoardField(
@@ -326,11 +326,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				100, //priceHouseAndHotel
 				16, //rentSolo
 				32, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				80, //rentHouse1
+				220, //rentHouse2
+				600, //rentHouse3
+				800, //rentHouse4
+				1000  //rentHotel
 			);
 
 		FIELDS[20] = new AustraliaBoardField(
@@ -358,11 +358,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				150, //priceHouseAndHotel
 				18, //rentSolo
 				36, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				90, //rentHouse1
+				250, //rentHouse2
+				700, //rentHouse3
+				875, //rentHouse4
+				1050  //rentHotel
 			);
 
 		FIELDS[22] = new AustraliaBoardField(
@@ -390,11 +390,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				150, //priceHouseAndHotel
 				18, //rentSolo
 				36, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				90, //rentHouse1
+				250, //rentHouse2
+				700, //rentHouse3
+				875, //rentHouse4
+				1050  //rentHotel
 			);
 
 		FIELDS[24] = new AustraliaBoardField(
@@ -406,11 +406,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				150, //priceHouseAndHotel
 				20, //rentSolo
 				40, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				100, //rentHouse1
+				300, //rentHouse2
+				750, //rentHouse3
+				925, //rentHouse4
+				1100  //rentHotel
 			);
 
 		FIELDS[25] = new AustraliaBoardField(
@@ -438,11 +438,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				150, //priceHouseAndHotel
 				22, //rentSolo
 				44, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				110, //rentHouse1
+				330, //rentHouse2
+				800, //rentHouse3
+				975, //rentHouse4
+				1150  //rentHotel
 			);
 
 		FIELDS[27] = new AustraliaBoardField(
@@ -454,11 +454,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				150, //priceHouseAndHotel
 				22, //rentSolo
 				44, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				110, //rentHouse1
+				330, //rentHouse2
+				800, //rentHouse3
+				975, //rentHouse4
+				1150  //rentHotel
 			);
 
 		FIELDS[28] = new AustraliaBoardField(
@@ -486,11 +486,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				150, //priceHouseAndHotel
 				24, //rentSolo
 				48, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				120, //rentHouse1
+				360, //rentHouse2
+				850, //rentHouse3
+				1025, //rentHouse4
+				1200  //rentHotel
 			);
 
 		FIELDS[30] = new AustraliaBoardField(
@@ -518,11 +518,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				200, //priceHouseAndHotel
 				26, //rentSolo
 				52, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				130, //rentHouse1
+				390, //rentHouse2
+				900, //rentHouse3
+				1100, //rentHouse4
+				1275  //rentHotel
 			);
 
 		FIELDS[32] = new AustraliaBoardField(
@@ -534,11 +534,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				200, //priceHouseAndHotel
 				26, //rentSolo
 				52, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				130, //rentHouse1
+				390, //rentHouse2
+				900, //rentHouse3
+				1100, //rentHouse4
+				1275  //rentHotel
 			);
 
 		FIELDS[33] = new AustraliaBoardField(
@@ -566,11 +566,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				200, //priceHouseAndHotel
 				28, //rentSolo
 				56, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				150, //rentHouse1
+				450, //rentHouse2
+				1000, //rentHouse3
+				1200, //rentHouse4
+				1400  //rentHotel
 			);
 
 		FIELDS[35] = new AustraliaBoardField(
@@ -614,11 +614,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				200, //priceHouseAndHotel
 				35, //rentSolo
 				70, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				175, //rentHouse1
+				500, //rentHouse2
+				1100, //rentHouse3
+				1300, //rentHouse4
+				1500  //rentHotel
 			);
 
 		FIELDS[38] = new AustraliaBoardField(
@@ -646,11 +646,11 @@ public class AustraliaBoard implements MonopolyBoard {
 				200, //priceHouseAndHotel
 				50, //rentSolo
 				100, //rentAllColor
-				0, //rentHouse1
-				0, //rentHouse2
-				0, //rentHouse3
-				0, //rentHouse4
-				0  //rentHotel
+				200, //rentHouse1
+				600, //rentHouse2
+				1400, //rentHouse3
+				1700, //rentHouse4
+				2000  //rentHotel
 			);
 
 	}
