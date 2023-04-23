@@ -18,7 +18,7 @@ public abstract class MonopolyGamingStrategy {
 	public void playGame(final MonopolyBoard board, final int playerCount) {
 		final Player[] players = new Player[playerCount];
 		initPlayers(players);
-		int round = 0;
+		int round = 1;
 		boolean allPropertiesSold = false;
 		while (!allPropertiesSold && (round < MAX_ROUNDS)) {
 			System.out.println("\n++++Starting round " + round);
@@ -59,7 +59,7 @@ public abstract class MonopolyGamingStrategy {
 				}
 				if (boardField.isAvailableForPurchase()) {
 					if (player.getBalance() - boardField.getValue() >= getMinBalance()) {
-						boardField.setNewOwner(player, board.getAllFields());
+						boardField.setNewOwner(player, board.getAllFields(), round);
 						System.out.println("Field '" + boardField.getName() + "'(" + boardField.getValue() + ") was purchased by '" + player.getName() + "', remaining balance: " + player.getBalance());
 					} else {
 						System.out.println("Field '" + boardField.getName() + "'(" + boardField.getValue() + ") was NOT purchased by '" + player.getName() + "' with balance of " + player.getBalance());
@@ -69,8 +69,8 @@ public abstract class MonopolyGamingStrategy {
 					boardField.getCurrentOwner().getPayedRentForProperty(boardField, diceValue, board.getAllFields());
 					System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + boardField.getCurrentRent(diceValue, board.getAllFields()) + ")");
 				}
-				allPropertiesSold = board.checkForAllPropertiesSold();
 			}
+			allPropertiesSold = board.checkForAllPropertiesSold();
 
 			round++;
 		}
@@ -100,13 +100,16 @@ public abstract class MonopolyGamingStrategy {
 	}
 
 	private void printGameResults(final MonopolyBoard board, final Player[] players) {
+		System.out.println();
 		Arrays.stream(board.getAllFields())
 			.filter(MonopolyBoardField::isPurchasable)
-			.forEach(field -> System.out.println("Field: '" + field.getName() + "' is owned by '" + field.getCurrentOwner().getName() + "'."));
+			.forEach(field -> System.out.println("Field: '" + field.getName() + "' was acquired by '" + field.getCurrentOwner().getName() + "' in round " + field.getRoundOfPurchase() + "."));
 
+		System.out.println();
 		Arrays.stream(players)
 			.forEach(player -> System.out.println("Player: '" + player.getName() + "' owns " + getFieldsOwnedByPlayer(player, board).size() + " fields, has " + player.getBalance() + " money left and spent " + player.getRoundsInJail() + " rounds in jail."));
 
+		System.out.println();
 		final List<MonopolyBoardField.COLOR_CODE> foundColorCodes = new ArrayList<>();
 		Arrays.stream(board.getAllFields())
 				.filter(field -> field.canBuyHouse() && !foundColorCodes.contains(field.getColorCode()))

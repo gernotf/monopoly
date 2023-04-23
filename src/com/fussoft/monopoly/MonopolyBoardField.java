@@ -17,11 +17,13 @@ public interface MonopolyBoardField {
 
 	int getPriceHouseAndHotel();
 
+	int getRoundOfPurchase();
+
 	boolean isPurchasable();
 
 	boolean isAvailableForPurchase();
 
-	void setNewOwner(final Player newOwner, final MonopolyBoardField[] allFields);
+	void setNewOwner(final Player newOwner, final MonopolyBoardField[] allFields, final int currentRound);
 
 	void recalculateCurrentRent(final MonopolyBoardField[] allFields);
 

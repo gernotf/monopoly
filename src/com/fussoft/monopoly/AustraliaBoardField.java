@@ -26,6 +26,7 @@ public class AustraliaBoardField implements MonopolyBoardField {
 
 	private int currentRent;
 	private Player currentOwner;
+	private int roundOfPurchase;
 
 	public AustraliaBoardField(String name, FIELD_TYPE fieldType, COLOR_CODE colorCode, int value, int sameColorCount, int priceHouseAndHotel, int rentSolo,
 							   int rentAllColor, int rentHouse1, int rentHouse2, int rentHouse3, int rentHouse4, int rentHotel) {
@@ -44,6 +45,7 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		this.rentHotel = rentHotel;
 		currentRent = 0;
 		currentOwner = null;
+		roundOfPurchase = 0;
 	}
 
 	public String getName() {
@@ -68,6 +70,10 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		return currentOwner;
 	}
 
+	public int getRoundOfPurchase() {
+		return roundOfPurchase;
+	}
+
 	public int getCurrentRent(int diceValue, final MonopolyBoardField[] allFields) {
 		if (fieldType == FIELD_TYPE.WORKS) {
 			return getWorksFactor(allFields) * diceValue;
@@ -90,9 +96,10 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		return currentOwner == null;
 	}
 
-	public void setNewOwner(final Player newOwner, final MonopolyBoardField[] allFields) {
+	public void setNewOwner(final Player newOwner, final MonopolyBoardField[] allFields, final int currentRound) {
 		newOwner.payForProperty(this);
 		currentOwner = newOwner;
+		roundOfPurchase = currentRound;
 		recalculateCurrentRent(allFields);
 	}
 
