@@ -102,25 +102,16 @@ public abstract class MonopolyGamingStrategy {
 	private void printGameResults(final MonopolyBoard board, final Player[] players) {
 		Arrays.stream(board.getAllFields())
 			.filter(MonopolyBoardField::isPurchasable)
-			.forEach(field -> {
-				System.out.println("Field: '" + field.getName() + "' is owned by '" + field.getCurrentOwner().getName() + "'.");
-			});
+			.forEach(field -> System.out.println("Field: '" + field.getName() + "' is owned by '" + field.getCurrentOwner().getName() + "'."));
 
 		Arrays.stream(players)
-			.forEach(player -> {
-				System.out.println("Player: '" + player.getName() + "' owns " + getFieldsOwnedByPlayer(player, board).size() + " fields, has " + player.getBalance() + " money left and spent " + player.getRoundsInJail() + " rounds in jail.");
-			});
+			.forEach(player -> System.out.println("Player: '" + player.getName() + "' owns " + getFieldsOwnedByPlayer(player, board).size() + " fields, has " + player.getBalance() + " money left and spent " + player.getRoundsInJail() + " rounds in jail."));
 
 		final List<MonopolyBoardField.COLOR_CODE> foundColorCodes = new ArrayList<>();
 		Arrays.stream(board.getAllFields())
 				.filter(field -> field.canBuyHouse() && !foundColorCodes.contains(field.getColorCode()))
-				.map(field -> {
-					foundColorCodes.add(field.getColorCode());
-					return field;
-				})
-				.forEach(field -> {
-					System.out.println("Fields of color: '" + field.getColorCode() + "' are all owned by '" + field.getCurrentOwner().getName() + "'.");
-				});
+				.peek(field -> foundColorCodes.add(field.getColorCode()))
+				.forEach(field -> System.out.println("Fields of color: '" + field.getColorCode() + "' are all owned by '" + field.getCurrentOwner().getName() + "'."));
 	}
 
 

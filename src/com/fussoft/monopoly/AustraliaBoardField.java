@@ -1,11 +1,8 @@
 package com.fussoft.monopoly;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class AustraliaBoardField implements MonopolyBoardField {
-
-	private static final int AIRPORT_BASE_RENT = 25;
 
 	private final String name;
 

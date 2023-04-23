@@ -1,7 +1,6 @@
 package com.fussoft.monopoly;
 
 import java.util.Arrays;
-import java.util.List;
 
 import com.fussoft.monopoly.MonopolyBoardField.COLOR_CODE;
 import com.fussoft.monopoly.MonopolyBoardField.FIELD_TYPE;

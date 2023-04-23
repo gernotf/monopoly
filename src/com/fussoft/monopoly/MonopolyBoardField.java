@@ -1,6 +1,5 @@
 package com.fussoft.monopoly;
 
-import java.util.List;
 
 public interface MonopolyBoardField {
 
@@ -24,9 +23,9 @@ public interface MonopolyBoardField {
 
 	void setNewOwner(final Player newOwner, final MonopolyBoardField[] allFields);
 
-	public void recalculateCurrentRent(final MonopolyBoardField[] allFields);
+	void recalculateCurrentRent(final MonopolyBoardField[] allFields);
 
-	public void setCurrentRentToAllColor();
+	void setCurrentRentToAllColor();
 
 	boolean canBuyHouse();
 
