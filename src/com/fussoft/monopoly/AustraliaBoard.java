@@ -7,11 +7,11 @@ import com.fussoft.monopoly.MonopolyBoardField.COLOR_CODE;
 import com.fussoft.monopoly.MonopolyBoardField.FIELD_TYPE;
 
 public class AustraliaBoard implements MonopolyBoard {
-	
+
 	static final AustraliaBoardField[] FIELDS = new AustraliaBoardField[40];
-	
-	private int purchasableFields;
-	
+
+	private final int purchasableFields;
+
 	static {
 		FIELDS[0] = new AustraliaBoardField(
 				"Start",
@@ -556,7 +556,7 @@ public class AustraliaBoard implements MonopolyBoard {
 				0, //rentHouse4
 				0  //rentHotel
 			);
-		
+
 		FIELDS[34] = new AustraliaBoardField(
 				"Whitsundays",
 				FIELD_TYPE.LOCATION,
@@ -604,7 +604,7 @@ public class AustraliaBoard implements MonopolyBoard {
 				0, //rentHouse4
 				0  //rentHotel
 			);
-		
+
 		FIELDS[37] = new AustraliaBoardField(
 				"Orange",
 				FIELD_TYPE.LOCATION,
@@ -636,7 +636,7 @@ public class AustraliaBoard implements MonopolyBoard {
 				0, //rentHouse4
 				0  //rentHotel
 			);
-		
+
 		FIELDS[39] = new AustraliaBoardField(
 				"Sydney Harbor",
 				FIELD_TYPE.LOCATION,
@@ -652,23 +652,22 @@ public class AustraliaBoard implements MonopolyBoard {
 				0, //rentHouse4
 				0  //rentHotel
 			);
-		
+
 	}
 
 	public AustraliaBoard() {
-		purchasableFields = (int) Arrays.asList(FIELDS)
-				.stream()
+		purchasableFields = (int) Arrays.stream(FIELDS)
 				.filter(field -> (field.getFieldType() == FIELD_TYPE.AIRPORT || field.getFieldType() == FIELD_TYPE.LOCATION || field.getFieldType() == FIELD_TYPE.WORKS))
 				.count();
-		
+
 		System.out.println("Purchasable fields for this board: " + purchasableFields);
 	}
-	
+
 	@Override
 	public MonopolyBoardField[] getAllFields() {
 		return FIELDS;
 	}
-	
+
 	public MonopolyBoardField getFieldAtIndex(int fieldIndex) {
 		return FIELDS[fieldIndex];
 	}
@@ -679,8 +678,7 @@ public class AustraliaBoard implements MonopolyBoard {
 
 	@Override
 	public boolean checkForAllPropertiesSold() {
-		int soldFields = (int) Arrays.asList(FIELDS)
-		.stream()
+		int soldFields = (int) Arrays.stream(FIELDS)
 		.filter((field -> field.getCurrentOwner() != null && (field.getFieldType() == FIELD_TYPE.AIRPORT || field.getFieldType() == FIELD_TYPE.LOCATION || field.getFieldType() == FIELD_TYPE.WORKS)))
 		.count();
 		System.out.println("Currently, " + soldFields + " of " + purchasableFields + " are sold");

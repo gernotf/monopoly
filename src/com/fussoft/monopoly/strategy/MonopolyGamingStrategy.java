@@ -13,46 +13,48 @@ import java.util.stream.Collectors;
 public abstract class MonopolyGamingStrategy {
 
 	static final Random random = new Random();
-	
+
 	static final int MAX_ROUNDS = 100;
 	abstract int getMinBalance();
-	
-	
+
+
 	public void playGame(final MonopolyBoard board, final int playerCount) {
 		final Player[] players = new Player[playerCount];
-		initPlayers(players);		
+		initPlayers(players);
 		int round = 0;
 		boolean allPropertiesSold = false;
 		while (!allPropertiesSold && (round < MAX_ROUNDS)) {
 			System.out.println("\n++++Starting round " + round);
 			for (int playerNumber = 0; playerNumber < players.length; playerNumber++) {
-				
+
 				int diceValue1 = roleTheDice();
 				int diceValue2 = roleTheDice();
+
 				if (players[playerNumber].isInJail()) {
 					int[] doubleOrNot = threeTimesChanceToRollADouble(diceValue1, diceValue2);
 					if (doubleOrNot[0] == doubleOrNot[1]) {
-						System.out.println("Player '" + players[playerNumber].getName() + "' comes out of jail");
+						System.out.println("Player '" + players[playerNumber].getName() + "' comes out of jail.");
 						diceValue1 = doubleOrNot[0];
 						diceValue2 = doubleOrNot[1];
 					} else {
 						// not coming out of jail
 						players[playerNumber].addRoundInJail();
-						System.out.println("Player '" + players[playerNumber].getName() + "' stays in jail");
+						System.out.println("Player '" + players[playerNumber].getName() + "' stays in jail.");
 						continue;
 					}
 				}
+
 				int diceValue = diceValue1 + diceValue2;
-				
+
 				int newPosition = players[playerNumber].moveSteps(diceValue, board.getMaxFieldIndex(), board.getGoToJailIndex(), board.getJailIndex());
-				
+
 				final MonopolyBoardField boardField = board.getFieldAtIndex(newPosition);
-				
+
 				if (!boardField.isPurchasable()) {
 					// nothing to do on unpurchasable fields (for now)
 					continue;
 				}
-				
+
 				if (boardField.getCurrentOwner() == players[playerNumber]) {
 					// player returned to their own property - no action (for now)
 					continue;
@@ -74,7 +76,7 @@ public abstract class MonopolyGamingStrategy {
 					break;
 				}
 			}
-			
+
 			round++;
 		}
 		printGameResults(board, players);
@@ -89,7 +91,7 @@ public abstract class MonopolyGamingStrategy {
 	static int roleTheDice() {
 		return 1 + random.nextInt(6);
 	}
-	
+
 	private int[] threeTimesChanceToRollADouble(int diceValue1, int diceValue2) {
 		int newDiceValue1 = diceValue1;
 		int newDiceValue2 = diceValue2;
@@ -99,27 +101,27 @@ public abstract class MonopolyGamingStrategy {
 			newDiceValue2 = roleTheDice();
 		}
 		return new int[] {newDiceValue1, newDiceValue2};
-		
+
 	}
-	
+
 	private void printGameResults(final MonopolyBoard board, final Player[] players) {
-		Arrays.asList(board.getAllFields()).stream()
-		.filter(field -> field.isPurchasable())
+		Arrays.stream(board.getAllFields())
+		.filter(MonopolyBoardField::isPurchasable)
 		.forEach(field -> {
 			System.out.println("Field: '" + field.getName() + "' is owned by '" + field.getCurrentOwner().getName() + "'.");
 		});
-		Arrays.asList(players).stream()
+		Arrays.stream(players)
 		.forEach(player -> {
 			System.out.println("Player: '" + player.getName() + "' owns " + getFieldsOwnedByPlayer(player, board).size() + " fields, has " + player.getBalance() + " money left and spent " + player.getRoundsInJail() + " rounds in jail.");
 		});
-		
+
 	}
 
 
 	private List<MonopolyBoardField> getFieldsOwnedByPlayer(Player player, MonopolyBoard board) {
-		return Arrays.asList(board.getAllFields()).stream()
+		return Arrays.stream(board.getAllFields())
 				.filter(field -> field.getCurrentOwner() == player)
 				.collect(Collectors.toList());
 	}
-	
+
 }

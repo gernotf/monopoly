@@ -1,14 +1,14 @@
 package com.fussoft.monopoly;
 
 public class Player {
-	
-	private String name;
+
+	private final String name;
 	private int balance;
 	private int boardPosition;
 	private boolean isInJail;
 
 	private int roundsInJail;
-	
+
 	public Player (String name, int initialBalance) {
 		this.name = name;
 		this.balance = initialBalance;
@@ -16,7 +16,7 @@ public class Player {
 		this.isInJail = false;
 		this.roundsInJail = 0;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -28,7 +28,7 @@ public class Player {
 	public int getBoardPosition() {
 		return boardPosition;
 	}
-	
+
 	public boolean isInJail() {
 		return isInJail;
 	}
@@ -36,7 +36,7 @@ public class Player {
 	public int getRoundsInJail() {
 		return roundsInJail;
 	}
-	
+
 	public void addRoundInJail() {
 		this.roundsInJail++;
 	}
@@ -58,25 +58,22 @@ public class Player {
 		}
 		return boardPosition;
 	}
-	
-	public int payForProperty(final MonopolyBoardField field) {
+
+	public void payForProperty(final MonopolyBoardField field) {
 		balance -= field.getValue();
-		return balance;
-	}
-	
-	public int getPayedRentForProperty(final MonopolyBoardField field, int diceValue, final MonopolyBoardField[] allFields) {
-		balance += field.getCurrentRent(diceValue, allFields);
-		return balance;
 	}
 
-	public int payRentForProperty(final MonopolyBoardField field, int diceValue, final MonopolyBoardField[] allFields) {
-		balance -= field.getCurrentRent(diceValue, allFields);
-		return balance;
+	public void getPayedRentForProperty(final MonopolyBoardField field, int diceValue, final MonopolyBoardField[] allFields) {
+		balance += field.getCurrentRent(diceValue, allFields);
 	}
-	
+
+	public void payRentForProperty(final MonopolyBoardField field, int diceValue, final MonopolyBoardField[] allFields) {
+		balance -= field.getCurrentRent(diceValue, allFields);
+	}
+
 	public int payHouseOrHotelForProperty(final AustraliaBoardField field) {
 		balance -= field.getPriceHouseAndHotel();
 		return balance;
 	}
-	
+
 }
