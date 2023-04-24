@@ -59,8 +59,8 @@ public class Player {
 		return boardPosition;
 	}
 
-	public void payForProperty(final MonopolyBoardField field) {
-		balance -= field.getValue();
+	public void payForProperty(final int priceToPay) {
+		balance -= priceToPay;
 	}
 
 	public void getPayedRentForProperty(final MonopolyBoardField field, int diceValue, final MonopolyBoardField[] allFields) {

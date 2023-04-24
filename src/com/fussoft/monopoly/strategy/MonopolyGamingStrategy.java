@@ -20,11 +20,12 @@ public abstract class MonopolyGamingStrategy {
 		initPlayers(players);
 		int round = 1;
 		boolean allPropertiesSold = false;
+
 		while (!allPropertiesSold && (round < MAX_ROUNDS)) {
+
 			System.out.println("\n++++Starting round " + round);
 
 			for (Player player : players) {
-
 				int diceValue1 = roleTheDice();
 				int diceValue2 = roleTheDice();
 
@@ -59,10 +60,16 @@ public abstract class MonopolyGamingStrategy {
 				}
 				if (boardField.isAvailableForPurchase()) {
 					if (player.getBalance() - boardField.getValue() >= getMinBalance()) {
-						boardField.setNewOwner(player, board.getAllFields(), round);
+						boardField.setNewOwner(player, boardField.getValue(), board.getAllFields(), round);
 						System.out.println("Field '" + boardField.getName() + "'(" + boardField.getValue() + ") was purchased by '" + player.getName() + "', remaining balance: " + player.getBalance());
 					} else {
 						System.out.println("Field '" + boardField.getName() + "'(" + boardField.getValue() + ") was NOT purchased by '" + player.getName() + "' with balance of " + player.getBalance());
+						// auction the field
+						final AuctionResult auctionResult = getPlayerWithHighestBidOnProperty(boardField, board.getAllFields());
+						if (auctionResult != null) {
+							boardField.setNewOwner(auctionResult.chosenPlayer, auctionResult.priceToPay, board.getAllFields(), round);
+							System.out.println("\tField '" + boardField.getName() + "'(" + boardField.getValue() + ") was auctioned by '" + player.getName() + "' for " + auctionResult.priceToPay + ", remaining balance: " + player.getBalance());
+						}
 					}
 				} else {
 					player.payRentForProperty(boardField, diceValue, board.getAllFields());
@@ -70,8 +77,8 @@ public abstract class MonopolyGamingStrategy {
 					System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + boardField.getCurrentRent(diceValue, board.getAllFields()) + ")");
 				}
 			}
-			allPropertiesSold = board.checkForAllPropertiesSold();
 
+			allPropertiesSold = board.checkForAllPropertiesSold();
 			round++;
 		}
 		printGameResults(board, players);
@@ -87,9 +94,9 @@ public abstract class MonopolyGamingStrategy {
 		return 1 + random.nextInt(6);
 	}
 
-	private int[] threeTimesChanceToRollADouble(int diceValue1, int diceValue2) {
-		int newDiceValue1 = diceValue1;
-		int newDiceValue2 = diceValue2;
+	private int[] threeTimesChanceToRollADouble(int firstChanceDiceValue1, int firstChanceDiceValue2) {
+		int newDiceValue1 = firstChanceDiceValue1;
+		int newDiceValue2 = firstChanceDiceValue2;
 		int tryCount = 1;
 		while (newDiceValue1 != newDiceValue2 && tryCount++ < 3) {
 			newDiceValue1 = roleTheDice();
@@ -97,6 +104,36 @@ public abstract class MonopolyGamingStrategy {
 		}
 		return new int[] {newDiceValue1, newDiceValue2};
 
+	}
+
+	private AuctionResult getPlayerWithHighestBidOnProperty(final MonopolyBoardField boardField, MonopolyBoardField[] allFields) {
+		AuctionResult auctionResult = findPlayerWithSimilarColor(boardField, allFields);
+		if (auctionResult == null) {
+			auctionResult = findPlayerWithLowestBalance(boardField, allFields);
+			if (auctionResult == null) {
+				auctionResult = findPlayerWithLowestBalance(boardField, allFields);
+			}
+		}
+		return auctionResult;
+	}
+
+	private AuctionResult findPlayerWithSimilarColor(final MonopolyBoardField boardField, MonopolyBoardField[] allFields) {
+
+		final int priceToPay = boardField.getValue() * 2;
+
+		final List<Player> colorCodePlayers =  Arrays.stream(allFields)
+				.filter(field -> field.getColorCode() == boardField.getColorCode()
+						   && field.getCurrentOwner() != null)
+				.map(field -> field.getCurrentOwner())
+				.collect(Collectors.toList());
+
+		AuctionResult auctionResult = null;
+		if (!colorCodePlayers.isEmpty()) {
+			if (boardField.getSameColorCode() == 2) {
+			Player chosenPlayer = colorCodePlayers.get(0);
+			if (chosenPlayer.getBalance() - priceToPay >= getMinBalance())
+			auctionResult = new AuctionResult(colorCodePlayers.get(0), priceToPay);
+		}
 	}
 
 	private void printGameResults(final MonopolyBoard board, final Player[] players) {
@@ -117,11 +154,19 @@ public abstract class MonopolyGamingStrategy {
 				.forEach(field -> System.out.println("Fields of color: '" + field.getColorCode() + "' are all owned by '" + field.getCurrentOwner().getName() + "'."));
 	}
 
-
 	private List<MonopolyBoardField> getFieldsOwnedByPlayer(Player player, MonopolyBoard board) {
 		return Arrays.stream(board.getAllFields())
 				.filter(field -> field.getCurrentOwner() == player)
 				.collect(Collectors.toList());
 	}
+	class AuctionResult {
 
+		Player chosenPlayer;
+		int priceToPay;
+
+		AuctionResult(final Player chosenPlayer, int priceToPay) {
+			this.chosenPlayer = chosenPlayer;
+			this.priceToPay = priceToPay;
+		}
+	}
 }

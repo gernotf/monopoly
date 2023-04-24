@@ -9,6 +9,8 @@ public interface MonopolyBoardField {
 
 	COLOR_CODE getColorCode();
 
+	int getSameColorCode();
+
 	int getValue();
 
  	int getCurrentRent(int diceValue, final MonopolyBoardField[] allFields);
@@ -23,7 +25,7 @@ public interface MonopolyBoardField {
 
 	boolean isAvailableForPurchase();
 
-	void setNewOwner(final Player newOwner, final MonopolyBoardField[] allFields, final int currentRound);
+	void setNewOwner(final Player newOwner, final int price, final MonopolyBoardField[] allFields, final int currentRound);
 
 	void recalculateCurrentRent(final MonopolyBoardField[] allFields);
 

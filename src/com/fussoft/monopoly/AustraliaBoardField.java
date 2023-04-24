@@ -65,6 +65,10 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		return colorCode;
 	}
 
+	public int getSameColorCount() {
+		return sameColorCount;
+	}
+
 	@Override
 	public Player getCurrentOwner() {
 		return currentOwner;
@@ -96,8 +100,8 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		return currentOwner == null;
 	}
 
-	public void setNewOwner(final Player newOwner, final MonopolyBoardField[] allFields, final int currentRound) {
-		newOwner.payForProperty(this);
+	public void setNewOwner(final Player newOwner, final int priceToPay, final MonopolyBoardField[] allFields, final int currentRound) {
+		newOwner.payForProperty(priceToPay);
 		currentOwner = newOwner;
 		roundOfPurchase = currentRound;
 		recalculateCurrentRent(allFields);
