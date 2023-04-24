@@ -9,7 +9,7 @@ public interface MonopolyBoardField {
 
 	COLOR_CODE getColorCode();
 
-	int getSameColorCode();
+	int getSameColorCount();
 
 	int getValue();
 
