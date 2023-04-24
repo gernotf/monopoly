@@ -69,7 +69,7 @@ public abstract class MonopolyGamingStrategy {
 						final AuctionResult auctionResult = getPlayerWithHighestBidOnProperty(boardField, board.getAllFields(), players);
 						if (auctionResult != null) {
 							boardField.setNewOwner(auctionResult.chosenPlayer, auctionResult.priceToPay, board.getAllFields(), round);
-							System.out.println("\tField '" + boardField.getName() + "'(" + boardField.getValue() + ") was auctioned by '" + player.getName() + "' for " + auctionResult.priceToPay + ", remaining balance: " + player.getBalance());
+							System.out.println("\tField '" + boardField.getName() + "'(" + boardField.getValue() + ") was auctioned by '" + auctionResult.chosenPlayer.getName() + "' for " + auctionResult.priceToPay + ", remaining balance: " + auctionResult.chosenPlayer.getBalance());
 						}
 					}
 				} else {
@@ -135,6 +135,7 @@ public abstract class MonopolyGamingStrategy {
 				Player chosenPlayer = colorCodePlayers.get(0);
 				if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
 					auctionResult = new AuctionResult(colorCodePlayers.get(0), priceStrategy);
+					System.out.println("Chosen player by similar color (2): '" + chosenPlayer.getName() + "'.");
 				}
 			} else {
 				// in here, there are 3 fields of the same colorCode
@@ -143,6 +144,7 @@ public abstract class MonopolyGamingStrategy {
 					Player chosenPlayer = colorCodePlayers.get(0);
 					if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
 						auctionResult = new AuctionResult(colorCodePlayers.get(0), priceStrategy);
+						System.out.println("Chosen player by similar color (3, 1): '" + chosenPlayer.getName() + "'.");
 					}
 				} else {
 					if (colorCodePlayers.get(0) == colorCodePlayers.get(1)) {
@@ -150,6 +152,7 @@ public abstract class MonopolyGamingStrategy {
 						Player chosenPlayer = colorCodePlayers.get(0);
 						if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
 							auctionResult = new AuctionResult(colorCodePlayers.get(0), priceStrategy);
+							System.out.println("Chosen player by similar color (3, 2): '" + chosenPlayer.getName() + "'.");
 						}
 					}
 				}
