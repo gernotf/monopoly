@@ -35,7 +35,9 @@ public interface MonopolyBoardField {
 
 	boolean canBuyHouse();
 
-	void buyHouseOrHotel(final MonopolyBoardField[] allFields);
+	void buyHouseOrHotel();
+
+	int getNumberOfHouses();
 
 	enum FIELD_TYPE {
 		START,

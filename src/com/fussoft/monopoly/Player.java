@@ -2,6 +2,10 @@ package com.fussoft.monopoly;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Player {
 
@@ -88,7 +92,12 @@ public class Player {
 	}
 
 	public int sellHouses(int remainingPayment, MonopolyBoardField[] allFields) {
-
+		final List<MonopolyBoardField> fieldsSortedByHouses = Arrays.stream(allFields)
+				.filter(field -> field.getCurrentOwner() == this)
+				.filter(field -> field.getNumberOfHouses() > 0)
+				.sorted(Comparator.comparingInt(MonopolyBoardField::getNumberOfHouses))
+				.collect(Collectors.toList());
+		
 
 		return 0;
 	}

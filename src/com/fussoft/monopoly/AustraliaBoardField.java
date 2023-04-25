@@ -130,7 +130,7 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		return (currentRent > rentSolo) && (currentRent < rentHotel);
 	}
 
-	public void buyHouseOrHotel(final MonopolyBoardField[] allFields) {
+	public void buyHouseOrHotel() {
 		if (currentRent == rentAllColor) {
 			currentRent = rentHouse1;
 		} else if (currentRent == rentHouse1) {
@@ -142,6 +142,27 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		} else {
 			currentRent = rentHotel;
 		}
+	}
+
+	public int getNumberOfHouses() {
+		final int numberOfHouses;
+		if (currentRent == rentSolo || currentRent == rentAllColor) {
+			numberOfHouses = 0;
+		} else if (currentRent == rentHouse1) {
+			numberOfHouses = 1;
+		} else if (currentRent == rentHouse2) {
+			numberOfHouses = 2;
+		} else if (currentRent == rentHouse3) {
+			numberOfHouses = 3;
+		} else if (currentRent == rentHouse4) {
+			numberOfHouses = 4;
+		} else if (currentRent == rentHotel) {
+			numberOfHouses = 5;
+		} else {
+			// should not be possible
+			numberOfHouses = 0;
+		}
+		return numberOfHouses;
 	}
 
 	public void setCurrentRentToAllColor() {
