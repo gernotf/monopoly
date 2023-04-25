@@ -9,12 +9,15 @@ public class Player {
 
 	private int roundsInJail;
 
+	private int passedStartField;
+
 	public Player (String name, int initialBalance) {
 		this.name = name;
 		this.balance = initialBalance;
 		this.boardPosition = 0;
 		this.isInJail = false;
 		this.roundsInJail = 0;
+		this.passedStartField = 0;
 	}
 
 	public String getName() {
@@ -37,6 +40,10 @@ public class Player {
 		return roundsInJail;
 	}
 
+	public int getPassedStartField() {
+		return passedStartField;
+	}
+
 	public void addRoundInJail() {
 		this.roundsInJail++;
 	}
@@ -49,6 +56,7 @@ public class Player {
 			System.out.println("Player '" + this.name + "' crossed the START field.");
 			boardPosition -= maxFieldIndex;
 			balance += 200;
+			passedStartField++;
 		}
 		if (boardPosition == goToJailIndex) {
 			boardPosition = jailIndex;

@@ -26,7 +26,10 @@ public abstract class MonopolyGamingStrategy {
 
 			System.out.println("\n++++Starting round " + round);
 
-			for (Player player : players) {
+			for (int playerNumber = 0; playerNumber < players.length; playerNumber++) {
+
+				final Player player = players[playerNumber];
+
 				int diceValue1 = roleTheDice();
 				int diceValue2 = roleTheDice();
 
@@ -77,8 +80,12 @@ public abstract class MonopolyGamingStrategy {
 					boardField.getCurrentOwner().getPayedRentForProperty(boardField, diceValue, board.getAllFields());
 					System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + boardField.getCurrentRent(diceValue, board.getAllFields()) + ")");
 				}
+				if (diceValue1 == diceValue2) {
+					// current player rolled a double and have another turn
+					System.out.println("Player '" + player.getName() + "' rolled a double and has another turn.");
+					playerNumber--;
+				}
 			}
-
 			allPropertiesSold = board.checkForAllPropertiesSold();
 			round++;
 		}
@@ -123,13 +130,20 @@ public abstract class MonopolyGamingStrategy {
 		final int priceStrategy = boardField.getValue() * 2;
 
 		final List<Player> colorCodePlayers =  Arrays.stream(allFields)
-				.filter(field -> field.getColorCode() == boardField.getColorCode()
+				.filter(field ->
+						((boardField.getFieldType() == MonopolyBoardField.FIELD_TYPE.AIRPORT && field.getFieldType() == MonopolyBoardField.FIELD_TYPE.AIRPORT)
+								|| (boardField.getFieldType() == MonopolyBoardField.FIELD_TYPE.LOCATION && field.getColorCode() == boardField.getColorCode()))
 						&& field.getCurrentOwner() != null)
 				.map(MonopolyBoardField::getCurrentOwner)
 				.collect(Collectors.toList());
 
 		AuctionResult auctionResult = null;
 		if (!colorCodePlayers.isEmpty()) {
+			if (boardField.getFieldType() == MonopolyBoardField.FIELD_TYPE.AIRPORT) {
+				if (colorCodePlayers.size() == 1) {
+
+				}
+			}
 			if (boardField.getSameColorCount() == 2) {
 				// there can only be one player with a property of that color - it's the chosen one
 				Player chosenPlayer = colorCodePlayers.get(0);
@@ -216,7 +230,7 @@ public abstract class MonopolyGamingStrategy {
 
 		System.out.println();
 		Arrays.stream(players)
-				.forEach(player -> System.out.println("Player: '" + player.getName() + "' owns " + getFieldsOwnedByPlayer(player, board).size() + " fields, has " + player.getBalance() + " money left and spent " + player.getRoundsInJail() + " rounds in jail."));
+				.forEach(player -> System.out.println("Player: '" + player.getName() + "' owns " + getFieldsOwnedByPlayer(player, board).size() + " fields, has " + player.getBalance() + " money left, spent " + player.getRoundsInJail() + " rounds in jail, and crossed " + player.getPassedStartField() + " times the Start field."));
 
 		System.out.println();
 		final List<MonopolyBoardField.COLOR_CODE> foundColorCodes = new ArrayList<>();
