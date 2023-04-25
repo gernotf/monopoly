@@ -27,6 +27,8 @@ public interface MonopolyBoardField {
 
 	void setNewOwner(final Player newOwner, final int price, final MonopolyBoardField[] allFields, final int currentRound);
 
+	void switchOwner(final Player newOwner, final MonopolyBoardField[] allFields);
+
 	void recalculateCurrentRent(final MonopolyBoardField[] allFields);
 
 	void setCurrentRentToAllColor();

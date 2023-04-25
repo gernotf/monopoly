@@ -102,8 +102,12 @@ public class AustraliaBoardField implements MonopolyBoardField {
 
 	public void setNewOwner(final Player newOwner, final int priceToPay, final MonopolyBoardField[] allFields, final int currentRound) {
 		newOwner.payForProperty(priceToPay);
-		currentOwner = newOwner;
 		roundOfPurchase = currentRound;
+		switchOwner(newOwner, allFields);
+	}
+
+	public void switchOwner(final Player newOwner, final MonopolyBoardField[] allFields) {
+		currentOwner = newOwner;
 		recalculateCurrentRent(allFields);
 	}
 

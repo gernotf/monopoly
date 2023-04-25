@@ -3,6 +3,7 @@ package com.fussoft.monopoly.strategy;
 import com.fussoft.monopoly.MonopolyBoard;
 import com.fussoft.monopoly.MonopolyBoardField;
 import com.fussoft.monopoly.Player;
+import com.fussoft.monopoly.PropertiesRecord;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -76,12 +77,10 @@ public abstract class MonopolyGamingStrategy {
 						}
 					}
 				} else {
-					player.payRentForProperty(boardField, diceValue, board.getAllFields());
-					boardField.getCurrentOwner().getPayedRentForProperty(boardField, diceValue, board.getAllFields());
-					System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + boardField.getCurrentRent(diceValue, board.getAllFields()) + ")");
+					payForProperty(board, player, diceValue, boardField);
 				}
 				if (diceValue1 == diceValue2) {
-					// current player rolled a double and have another turn
+					// current player rolled a double and has another turn
 					System.out.println("Player '" + player.getName() + "' rolled a double and has another turn.");
 					playerNumber--;
 				}
@@ -90,6 +89,40 @@ public abstract class MonopolyGamingStrategy {
 			round++;
 		}
 		printGameResults(board, players);
+	}
+
+	private boolean payForProperty(MonopolyBoard board, Player player, int diceValue, MonopolyBoardField boardField) {
+		boolean isPayerBankrupt = false;
+		final int currentRent = boardField.getCurrentRent(diceValue, board.getAllFields());
+		if (currentRent <= player.getBalance() - getMinBalance()) {
+			player.payRentForProperty(currentRent);
+			boardField.getCurrentOwner().getPayedRentForProperty(currentRent);
+			System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + currentRent + ")");
+		} else {
+			final int remainingPaymentHouses = currentRent - (player.getBalance() - getMinBalance());
+			final int gainFromSoldHouses = player.sellHouses(remainingPaymentHouses, board.getAllFields());
+			if (gainFromSoldHouses >= remainingPaymentHouses) {
+				player.payRentForProperty(currentRent);
+				boardField.getCurrentOwner().getPayedRentForProperty(currentRent);
+				System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") sold houses and payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + currentRent + ")");
+			} else {
+				final int remainingPaymentProperties = remainingPaymentHouses - gainFromSoldHouses;
+				final PropertiesRecord propertiesRecord = player.provideProperties(remainingPaymentHouses, board.getAllFields());
+				if (propertiesRecord.getSumPrice() >= remainingPaymentProperties) {
+					// paying player may pay more with the sum of the value of the provided properties - the payee doesn't pay back the change!
+					player.payRentForProperty(currentRent);
+					boardField.getCurrentOwner().getPayedRentForProperty(currentRent);
+					propertiesRecord.getProperties()
+							.forEach(property -> property.switchOwner(boardField.getCurrentOwner(), board.getAllFields()));
+					System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") sold houses, handed properties and payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + currentRent + ")");
+				} else {
+					isPayerBankrupt = true;
+					System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") is bankrupt and unable to pay the current rent of " + currentRent + ". Sold houses for " + gainFromSoldHouses + ", and handed over " + propertiesRecord.getProperties().size() + " properties of value " + propertiesRecord.getSumPrice() + ".");
+				}
+
+			}
+		}
+		return isPayerBankrupt;
 	}
 
 	protected void initPlayers(Player[] players) {
@@ -133,7 +166,7 @@ public abstract class MonopolyGamingStrategy {
 				.filter(field ->
 						((boardField.getFieldType() == MonopolyBoardField.FIELD_TYPE.AIRPORT && field.getFieldType() == MonopolyBoardField.FIELD_TYPE.AIRPORT)
 								|| (boardField.getFieldType() == MonopolyBoardField.FIELD_TYPE.LOCATION && field.getColorCode() == boardField.getColorCode()))
-						&& field.getCurrentOwner() != null)
+								&& field.getCurrentOwner() != null)
 				.map(MonopolyBoardField::getCurrentOwner)
 				.collect(Collectors.toList());
 
@@ -142,9 +175,9 @@ public abstract class MonopolyGamingStrategy {
 			if (boardField.getFieldType() == MonopolyBoardField.FIELD_TYPE.AIRPORT) {
 				// just select the first player in line with the most airports
 				if (colorCodePlayers.size() == 1
-					|| (colorCodePlayers.size() == 2 && (colorCodePlayers.get(0) == colorCodePlayers.get(1)))
-					|| (colorCodePlayers.size() == 3 && (((colorCodePlayers.get(1) == colorCodePlayers.get(2)))
-														|| ((colorCodePlayers.get(0) == colorCodePlayers.get(1)) && (colorCodePlayers.get(0) == colorCodePlayers.get(2)))))
+						|| (colorCodePlayers.size() == 2 && (colorCodePlayers.get(0) == colorCodePlayers.get(1)))
+						|| (colorCodePlayers.size() == 3 && (((colorCodePlayers.get(1) == colorCodePlayers.get(2)))
+						|| ((colorCodePlayers.get(0) == colorCodePlayers.get(1)) && (colorCodePlayers.get(0) == colorCodePlayers.get(2)))))
 				) {
 					Player chosenPlayer = colorCodePlayers.get(0);
 					if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {

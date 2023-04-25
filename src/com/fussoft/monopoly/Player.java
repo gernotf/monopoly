@@ -1,5 +1,8 @@
 package com.fussoft.monopoly;
 
+
+import java.util.ArrayList;
+
 public class Player {
 
 	private final String name;
@@ -71,12 +74,12 @@ public class Player {
 		balance -= priceToPay;
 	}
 
-	public void getPayedRentForProperty(final MonopolyBoardField field, int diceValue, final MonopolyBoardField[] allFields) {
-		balance += field.getCurrentRent(diceValue, allFields);
+	public void getPayedRentForProperty(final int paidRent) {
+		balance += paidRent;
 	}
 
-	public void payRentForProperty(final MonopolyBoardField field, int diceValue, final MonopolyBoardField[] allFields) {
-		balance -= field.getCurrentRent(diceValue, allFields);
+	public void payRentForProperty(final int rentToPay) {
+		balance -= rentToPay;
 	}
 
 	public int payHouseOrHotelForProperty(final AustraliaBoardField field) {
@@ -84,4 +87,16 @@ public class Player {
 		return balance;
 	}
 
+	public int sellHouses(int remainingPayment, MonopolyBoardField[] allFields) {
+
+
+		return 0;
+	}
+
+	public PropertiesRecord provideProperties(int remainingPaymentHouses, MonopolyBoardField[] allFields) {
+		PropertiesRecord propertiesRecord = new PropertiesRecord(new ArrayList<>(), 0);
+
+
+		return propertiesRecord;
+	}
 }
