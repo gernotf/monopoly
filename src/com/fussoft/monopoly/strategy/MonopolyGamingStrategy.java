@@ -140,15 +140,32 @@ public abstract class MonopolyGamingStrategy {
 		AuctionResult auctionResult = null;
 		if (!colorCodePlayers.isEmpty()) {
 			if (boardField.getFieldType() == MonopolyBoardField.FIELD_TYPE.AIRPORT) {
-				if (colorCodePlayers.size() == 1) {
-
+				// just select the first player in line with the most airports
+				if (colorCodePlayers.size() == 1
+					|| (colorCodePlayers.size() == 2 && (colorCodePlayers.get(0) == colorCodePlayers.get(1)))
+					|| (colorCodePlayers.size() == 3 && (((colorCodePlayers.get(1) == colorCodePlayers.get(2)))
+														|| ((colorCodePlayers.get(0) == colorCodePlayers.get(1)) && (colorCodePlayers.get(0) == colorCodePlayers.get(2)))))
+				) {
+					Player chosenPlayer = colorCodePlayers.get(0);
+					if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
+						auctionResult = new AuctionResult(chosenPlayer, priceStrategy);
+						System.out.println("Chosen player for Airport (4, 1/2/3): '" + chosenPlayer.getName() + "'.");
+					}
+				} else if (colorCodePlayers.size() == 3
+						&& (colorCodePlayers.get(0) == colorCodePlayers.get(2) || colorCodePlayers.get(1) == colorCodePlayers.get(2))
+				) {
+					Player chosenPlayer = colorCodePlayers.get(2);
+					if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
+						auctionResult = new AuctionResult(chosenPlayer, priceStrategy);
+						System.out.println("Chosen player for Airport (4, 1/3 or 2/3): '" + chosenPlayer.getName() + "'.");
+					}
 				}
 			}
 			if (boardField.getSameColorCount() == 2) {
 				// there can only be one player with a property of that color - it's the chosen one
 				Player chosenPlayer = colorCodePlayers.get(0);
 				if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
-					auctionResult = new AuctionResult(colorCodePlayers.get(0), priceStrategy);
+					auctionResult = new AuctionResult(chosenPlayer, priceStrategy);
 					System.out.println("Chosen player by similar color (2): '" + chosenPlayer.getName() + "'.");
 				}
 			} else {
@@ -157,7 +174,7 @@ public abstract class MonopolyGamingStrategy {
 					// only one player owns a property of that color - it's the chosen one
 					Player chosenPlayer = colorCodePlayers.get(0);
 					if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
-						auctionResult = new AuctionResult(colorCodePlayers.get(0), priceStrategy);
+						auctionResult = new AuctionResult(chosenPlayer, priceStrategy);
 						System.out.println("Chosen player by similar color (3, 1): '" + chosenPlayer.getName() + "'.");
 					}
 				} else {
@@ -165,7 +182,7 @@ public abstract class MonopolyGamingStrategy {
 						// same owner - it's the chosen one
 						Player chosenPlayer = colorCodePlayers.get(0);
 						if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
-							auctionResult = new AuctionResult(colorCodePlayers.get(0), priceStrategy);
+							auctionResult = new AuctionResult(chosenPlayer, priceStrategy);
 							System.out.println("Chosen player by similar color (3, 2): '" + chosenPlayer.getName() + "'.");
 						}
 					}
