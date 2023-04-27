@@ -56,7 +56,8 @@ public class Player {
 	}
 
 	public int moveSteps(final int steps, final int maxFieldIndex, final int goToJailIndex, final int jailIndex) {
-		// player is allowed to move, so their couldn't be in jail
+		// players are allowed to move, so they couldn't be in jail
+		// but: check for go-to-jail and if so, move to jail
 		isInJail = false;
 		boardPosition+=steps;
 		if (boardPosition > maxFieldIndex) {
@@ -91,17 +92,52 @@ public class Player {
 		return balance;
 	}
 
+	/**
+	 *
+	 * @param remainingPayment Debt to be paid be selling houses.
+	 * @param allFields All the fields on the board.
+	 * @return Remaining debt after selling houses.
+	 */
 	public int sellHouses(int remainingPayment, MonopolyBoardField[] allFields) {
-		final List<MonopolyBoardField> fieldsSortedByHouses = Arrays.stream(allFields)
+		// sort the player's properties by
+		final List<MonopolyBoardField> fieldsSortedByHousesAsc = Arrays.stream(allFields)
 				.filter(field -> field.getCurrentOwner() == this)
 				.filter(field -> field.getNumberOfHouses() > 0)
 				.sorted(Comparator.comparingInt(MonopolyBoardField::getNumberOfHouses))
 				.collect(Collectors.toList());
-		
 
+		int gainFromHouses = 0;
+		if (!fieldsSortedByHousesAsc.isEmpty()) {
+			int listPosition = 0;
+			while (gainFromHouses < remainingPayment
+					&& listPosition >= 0) {
+				final int moneyFromSoldHouse = sellHouseFromColorCode(fieldsSortedByHousesAsc.get(listPosition).getColorCode());
+				if (moneyFromSoldHouse == 0) {
+					// don't get anymore money from houses of this color code, get (and check) the next one
+					listPosition = getIndexOfNextColorCode(fieldsSortedByHousesAsc, listPosition);
+				} else {
+					gainFromHouses += moneyFromSoldHouse;
+				}
+			}
+		}
+
+		return Math.max(0, remainingPayment - gainFromHouses);
+	}
+
+	private int sellHouseFromColorCode(MonopolyBoardField.COLOR_CODE colorCode) {
 		return 0;
 	}
 
+	private int getIndexOfNextColorCode(List<MonopolyBoardField> fieldsSortedByHousesAsc, int listPosition) {
+		return 0;
+	}
+
+	/**
+	 *
+	 * @param remainingPaymentHouses Debt to be paid be selling houses.
+	 * @param allFields All the fields on the board.
+	 * @return A list of returned properties and their sum'ed  value.
+	 */
 	public PropertiesRecord provideProperties(int remainingPaymentHouses, MonopolyBoardField[] allFields) {
 		PropertiesRecord propertiesRecord = new PropertiesRecord(new ArrayList<>(), 0);
 
