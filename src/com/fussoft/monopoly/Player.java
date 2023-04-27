@@ -111,7 +111,7 @@ public class Player {
 			int listPosition = 0;
 			while (gainFromHouses < remainingPayment
 					&& listPosition >= 0) {
-				final int moneyFromSoldHouse = sellHouseFromColorCode(fieldsSortedByHousesAsc.get(listPosition).getColorCode());
+				final int moneyFromSoldHouse = sellHouseFromColorCode(allFields, fieldsSortedByHousesAsc.get(listPosition).getColorCode());
 				if (moneyFromSoldHouse == 0) {
 					// don't get anymore money from houses of this color code, get (and check) the next one
 					listPosition = getIndexOfNextColorCode(fieldsSortedByHousesAsc, listPosition);
@@ -124,8 +124,21 @@ public class Player {
 		return Math.max(0, remainingPayment - gainFromHouses);
 	}
 
-	private int sellHouseFromColorCode(MonopolyBoardField.COLOR_CODE colorCode) {
-		return 0;
+	private int sellHouseFromColorCode(MonopolyBoardField[] allFields, MonopolyBoardField.COLOR_CODE colorCode) {
+		final MonopolyBoardField colorCodeFieldWithMostHouses = Arrays.stream(allFields)
+				.filter(field -> field.getColorCode() == colorCode)
+				.filter(field -> field.getNumberOfHouses() > 0)
+				.max(Comparator.comparingInt(MonopolyBoardField::getNumberOfHouses)).orElse(null);
+
+		int gainFromHouse = 0;
+		if (colorCodeFieldWithMostHouses != null) {
+			// sell the house
+			colorCodeFieldWithMostHouses.sellHouseOrHotel();
+			// ...and get the money
+			this.balance += colorCodeFieldWithMostHouses.getPriceHouseAndHotel();
+			gainFromHouse = colorCodeFieldWithMostHouses.getPriceHouseAndHotel();
+		}
+		return gainFromHouse;
 	}
 
 	private int getIndexOfNextColorCode(List<MonopolyBoardField> fieldsSortedByHousesAsc, int listPosition) {

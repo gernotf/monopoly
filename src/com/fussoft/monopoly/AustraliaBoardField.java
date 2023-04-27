@@ -144,6 +144,20 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		}
 	}
 
+	public void sellHouseOrHotel() {
+		if (currentRent == rentHouse1) {
+			currentRent = rentAllColor;
+		} else if (currentRent == rentHouse2) {
+			currentRent = rentHouse1;
+		} else if (currentRent == rentHouse3) {
+			currentRent = rentHouse2;
+		} else if (currentRent == rentHouse4) {
+			currentRent = rentHouse3;
+		} else if (currentRent == rentHotel) {
+			currentRent = rentHouse4;
+		}
+	}
+
 	public int getNumberOfHouses() {
 		final int numberOfHouses;
 		if (currentRent == rentSolo || currentRent == rentAllColor) {
