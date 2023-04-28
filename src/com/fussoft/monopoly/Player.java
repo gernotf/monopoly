@@ -125,36 +125,63 @@ public class Player {
 	}
 
 	private int sellHouseFromColorCode(MonopolyBoardField[] allFields, MonopolyBoardField.COLOR_CODE colorCode) {
-		final MonopolyBoardField colorCodeFieldWithMostHouses = Arrays.stream(allFields)
+		final MonopolyBoardField colorCodeFieldWithMostHouse = Arrays.stream(allFields)
 				.filter(field -> field.getColorCode() == colorCode)
 				.filter(field -> field.getNumberOfHouses() > 0)
 				.max(Comparator.comparingInt(MonopolyBoardField::getNumberOfHouses)).orElse(null);
 
 		int gainFromHouse = 0;
-		if (colorCodeFieldWithMostHouses != null) {
+		if (colorCodeFieldWithMostHouse != null) {
 			// sell the house
-			colorCodeFieldWithMostHouses.sellHouseOrHotel();
+			colorCodeFieldWithMostHouse.sellHouseOrHotel();
 			// ...and get the money
-			this.balance += colorCodeFieldWithMostHouses.getPriceHouseAndHotel();
-			gainFromHouse = colorCodeFieldWithMostHouses.getPriceHouseAndHotel();
+			this.balance += colorCodeFieldWithMostHouse.getPriceHouseAndHotel();
+			gainFromHouse = colorCodeFieldWithMostHouse.getPriceHouseAndHotel();
 		}
 		return gainFromHouse;
 	}
 
-	private int getIndexOfNextColorCode(List<MonopolyBoardField> fieldsSortedByHousesAsc, int listPosition) {
-		return 0;
+	private int getIndexOfNextColorCode(List<MonopolyBoardField> fieldsSortedByHousesAsc, int currentListPosition) {
+		final MonopolyBoardField.COLOR_CODE currentColorCode = fieldsSortedByHousesAsc.get(currentListPosition).getColorCode();
+
+		int nextColorCodeIndex = currentListPosition + 1;
+		while (nextColorCodeIndex < fieldsSortedByHousesAsc.size()
+				&& fieldsSortedByHousesAsc.get(nextColorCodeIndex).getColorCode() == currentColorCode) {
+			nextColorCodeIndex++;
+		}
+		if (nextColorCodeIndex >= fieldsSortedByHousesAsc.size()) {
+			nextColorCodeIndex = -1;
+		}
+		return nextColorCodeIndex;
 	}
 
 	/**
 	 *
-	 * @param remainingPaymentHouses Debt to be paid be selling houses.
+	 * @param remainingPayment Debt to be paid be returning properties.
 	 * @param allFields All the fields on the board.
 	 * @return A list of returned properties and their sum'ed  value.
 	 */
-	public PropertiesRecord provideProperties(int remainingPaymentHouses, MonopolyBoardField[] allFields) {
-		PropertiesRecord propertiesRecord = new PropertiesRecord(new ArrayList<>(), 0);
+	public PropertiesRecord provideProperties(int remainingPayment, MonopolyBoardField[] allFields) {
 
+		final List<MonopolyBoardField> fieldsSortedPropertyValueAsc = Arrays.stream(allFields)
+				.filter(field -> field.getCurrentOwner() == this)
+				.filter(field -> field.getNumberOfHouses() == 0)
+				.sorted(Comparator.comparingInt(MonopolyBoardField::getValue))
+				.collect(Collectors.toList());
 
+		int moneyFromReturnedProperties = 0;
+		final List<MonopolyBoardField> returnedProperties = new ArrayList<>();
+		int listIndex = 0;
+		while (moneyFromReturnedProperties < remainingPayment
+				&& listIndex < fieldsSortedPropertyValueAsc.size()) {
+
+			final MonopolyBoardField currentProperty = fieldsSortedPropertyValueAsc.get(listIndex);
+			returnedProperties.add(currentProperty);
+			moneyFromReturnedProperties += currentProperty.getValue();
+
+		}
+
+		PropertiesRecord propertiesRecord = new PropertiesRecord(returnedProperties, moneyFromReturnedProperties);
 		return propertiesRecord;
 	}
 }
