@@ -108,6 +108,7 @@ public class Player {
 
 		int gainFromHouses = 0;
 		if (!fieldsSortedByHousesAsc.isEmpty()) {
+			System.out.println("Player '" + name + "' can sell houses (or hotel) to pay the debt, as they have " + fieldsSortedByHousesAsc.size() + " properties with houses.");
 			int listPosition = 0;
 			while (gainFromHouses < remainingPayment
 					&& listPosition >= 0) {
@@ -137,6 +138,7 @@ public class Player {
 			// ...and get the money
 			this.balance += colorCodeFieldWithMostHouse.getPriceHouseAndHotel();
 			gainFromHouse = colorCodeFieldWithMostHouse.getPriceHouseAndHotel();
+			System.out.println("Player '" + name + "' sold a house (or hotel) from property '" + colorCodeFieldWithMostHouse.getName() + "' and got " + gainFromHouse + " back.");
 		}
 		return gainFromHouse;
 	}
@@ -151,6 +153,8 @@ public class Player {
 		}
 		if (nextColorCodeIndex >= fieldsSortedByHousesAsc.size()) {
 			nextColorCodeIndex = -1;
+		} else {
+			System.out.println("Select next colorCode with houses. Old code:'" + currentColorCode + "', new code:'" + fieldsSortedByHousesAsc.get(nextColorCodeIndex).getColorCode() + "'");
 		}
 		return nextColorCodeIndex;
 	}
@@ -178,10 +182,15 @@ public class Player {
 			final MonopolyBoardField currentProperty = fieldsSortedPropertyValueAsc.get(listIndex);
 			returnedProperties.add(currentProperty);
 			moneyFromReturnedProperties += currentProperty.getValue();
+			System.out.println("Player '" + name + "' returned property '" + currentProperty.getName() + "'. Remaining debt:" + (remainingPayment - moneyFromReturnedProperties));
 
 		}
 
 		PropertiesRecord propertiesRecord = new PropertiesRecord(returnedProperties, moneyFromReturnedProperties);
 		return propertiesRecord;
+	}
+
+	public void checkAndBuyHouses(MonopolyBoardField boardField, MonopolyBoardField[] allFields) {
+		
 	}
 }

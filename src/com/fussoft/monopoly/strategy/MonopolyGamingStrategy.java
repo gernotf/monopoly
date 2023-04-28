@@ -79,6 +79,9 @@ public abstract class MonopolyGamingStrategy {
 				} else {
 					payForProperty(board, player, diceValue, boardField);
 				}
+
+				player.checkAndBuyHouses(boardField, board.getAllFields());
+
 				if (diceValue1 == diceValue2) {
 					// current player rolled a double and has another turn
 					System.out.println("Player '" + player.getName() + "' rolled a double and has another turn.");
