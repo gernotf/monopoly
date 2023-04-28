@@ -18,6 +18,8 @@ public class Player {
 
 	private int passedStartField;
 
+	private boolean isBankrupt;
+
 	public Player (String name, int initialBalance) {
 		this.name = name;
 		this.balance = initialBalance;
@@ -25,6 +27,7 @@ public class Player {
 		this.isInJail = false;
 		this.roundsInJail = 0;
 		this.passedStartField = 0;
+		this.isBankrupt = false;
 	}
 
 	public String getName() {
@@ -85,6 +88,14 @@ public class Player {
 
 	public void payRentForProperty(final int rentToPay) {
 		balance -= rentToPay;
+	}
+
+	public void setIsBankrupt(final boolean isBankrupt) {
+		this.isBankrupt = isBankrupt;
+	}
+
+	public boolean isBankrupt() {
+		return isBankrupt;
 	}
 
 	public int payHouseOrHotelForProperty(final AustraliaBoardField field) {
@@ -191,6 +202,12 @@ public class Player {
 	}
 
 	public void checkAndBuyHouses(MonopolyBoardField boardField, MonopolyBoardField[] allFields) {
-		
+
+		if (balance - )
+		final List<MonopolyBoardField> fieldsForBuyingHousesSortByExistingHousesDesc = Arrays.stream(allFields)
+				.filter(field -> field.getCurrentOwner() == this)
+				.filter(field -> field.canBuyHouse())
+				.sorted(Comparator.comparingInt(MonopolyBoardField::getNumberOfHouses).reversed())
+				.collect(Collectors.toList());
 	}
 }

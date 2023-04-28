@@ -34,6 +34,10 @@ public abstract class MonopolyGamingStrategy {
 				int diceValue1 = roleTheDice();
 				int diceValue2 = roleTheDice();
 
+				if (player.isBankrupt()) {
+					continue;
+				}
+
 				if (player.isInJail()) {
 					int[] doubleOrNot = threeTimesChanceToRollADouble(diceValue1, diceValue2);
 					if (doubleOrNot[0] == doubleOrNot[1]) {
@@ -77,7 +81,7 @@ public abstract class MonopolyGamingStrategy {
 						}
 					}
 				} else {
-					payForProperty(board, player, diceValue, boardField);
+					player.setIsBankrupt(payForProperty(board, player, diceValue, boardField));
 				}
 
 				player.checkAndBuyHouses(boardField, board.getAllFields());
@@ -119,6 +123,7 @@ public abstract class MonopolyGamingStrategy {
 							.forEach(property -> property.switchOwner(boardField.getCurrentOwner(), board.getAllFields()));
 					System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") sold houses, handed properties and payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + currentRent + ")");
 				} else {
+					// player has sold all houses and properties and is still unable to pay the rent - the player is bankrupt
 					isPayerBankrupt = true;
 					System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") is bankrupt and unable to pay the current rent of " + currentRent + ". Sold houses for " + gainFromSoldHouses + ", and handed over " + propertiesRecord.getProperties().size() + " properties of value " + propertiesRecord.getSumPrice() + ".");
 				}
