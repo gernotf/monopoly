@@ -23,7 +23,7 @@ public abstract class MonopolyGamingStrategy {
 		int round = 1;
 		int playersBankrupt = 0;
 
-		while (!(playersBankrupt == playerCount - 1) && (round < MAX_ROUNDS)) {
+		while ((playersBankrupt < playerCount - 1) && (round < MAX_ROUNDS)) {
 
 			System.out.println("\n++++Starting round " + round);
 
@@ -81,7 +81,7 @@ public abstract class MonopolyGamingStrategy {
 						}
 					}
 				} else {
-					if (!payForProperty(board, player, diceValue, boardField)) {
+					if (payForProperty(board, player, diceValue, boardField)) {
 						player.setIsBankrupt(true);
 						playersBankrupt++;
 					}
@@ -286,6 +286,7 @@ public abstract class MonopolyGamingStrategy {
 		System.out.println();
 		Arrays.stream(board.getAllFields())
 				.filter(MonopolyBoardField::isPurchasable)
+				.filter(field -> field.getCurrentOwner() != null)
 				.forEach(field -> System.out.println("Field: '" + field.getName() + "' was acquired by '" + field.getCurrentOwner().getName() + "' in round " + field.getRoundOfPurchase() + "."));
 
 		System.out.println();
@@ -304,7 +305,7 @@ public abstract class MonopolyGamingStrategy {
 				.filter(player -> !player.isBankrupt())
 				.collect(Collectors.toList());
 		if (playersNotBankrupt.size() == 1) {
-			System.out.println("AND THE WINNER IS: '" + playersNotBankrupt.get(0)+ "' !!!");
+			System.out.println("AND THE WINNER IS: '" + playersNotBankrupt.get(0).getName() + "' !!!");
 		}
 
 
