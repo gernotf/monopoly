@@ -140,7 +140,7 @@ public class Player {
 			}
 		}
 
-		return Math.max(0, remainingPayment - gainFromHouses);
+		return gainFromHouses;
 	}
 
 	/**
@@ -167,23 +167,21 @@ public class Player {
 			returnedProperties.add(currentProperty);
 			moneyFromReturnedProperties += currentProperty.getValue();
 			System.out.println("Player '" + name + "' returned property '" + currentProperty.getName() + "'. Remaining debt:" + (remainingPayment - moneyFromReturnedProperties));
-
+			listIndex++;
 		}
 
-		PropertiesRecord propertiesRecord = new PropertiesRecord(returnedProperties, moneyFromReturnedProperties);
-		return propertiesRecord;
+		return new PropertiesRecord(returnedProperties, moneyFromReturnedProperties);
 	}
 
 	public void checkAndBuyHouses(MonopolyBoardField boardField, MonopolyBoardField[] allFields) {
-
 		while(checkAndBuyNextHouse(allFields)) {
-
+			System.out.println("Player '" + name + "'(" + balance + ") tries to buy a house.");
 		}
 	}
 
 	private boolean checkAndBuyNextHouse(MonopolyBoardField[] allFields) {
 		final int moneyToSpentOnBuying = balance - getPlayerMinBalance();
-		if (moneyToSpentOnBuying < 50) {
+		if (moneyToSpentOnBuying < MonopolyBoard.MIN_PRICE_FOR_A_HOUSE) {
 			System.out.println("Player '" + name + "'(" + balance + ") does not have enough money to buy a house.");
 			return false;
 		}
@@ -212,7 +210,7 @@ public class Player {
 			System.out.println("Player '" + name + "'(" + balance + ") - wanted to pick from a color - THIS SHOULD NOT HAPPEN.");
 			return false;
 		}
-		
+
 		System.out.println("Player '" + name + "'(" + balance + ") buys a house (or hotel) for property '" + fieldToBuyHouseFor.getName() + "'(price:" + fieldToBuyHouseFor.getPriceHouseAndHotel() + ").");
 		payHouseOrHotelForProperty(fieldToBuyHouseFor);
 		fieldToBuyHouseFor.buyHouseOrHotel();
@@ -221,7 +219,7 @@ public class Player {
 	}
 
 	public int getPlayerMinBalance() {
-		return playerStrategy.getPurchaseMinBalance();
+		return playerStrategy.getMinBalanceForPurchasingAHouse();
 	}
 
 	private int sellHouseFromColorCode(MonopolyBoardField[] allFields, MonopolyBoardField.COLOR_CODE colorCode) {
@@ -234,9 +232,9 @@ public class Player {
 		if (colorCodeFieldWithMostHouse != null) {
 			// sell the house
 			colorCodeFieldWithMostHouse.sellHouseOrHotel();
-			// ...and get the money
-			this.balance += colorCodeFieldWithMostHouse.getPriceHouseAndHotel();
-			gainFromHouse = colorCodeFieldWithMostHouse.getPriceHouseAndHotel();
+			// ...and get the money (which is half the price that you have to pay when purchasing it!)
+			gainFromHouse = colorCodeFieldWithMostHouse.getPriceHouseAndHotel() / 2;
+			this.balance += gainFromHouse;
 			System.out.println("Player '" + name + "' sold a house (or hotel) from property '" + colorCodeFieldWithMostHouse.getName() + "' and got " + gainFromHouse + " back.");
 		}
 		return gainFromHouse;

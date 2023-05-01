@@ -92,7 +92,7 @@ public abstract class MonopolyGamingStrategy {
 					playerNumber--;
 				}
 			}
-			allPropertiesSold = board.checkForAllPropertiesSold();
+			//allPropertiesSold = board.checkForAllPropertiesSold();
 			round++;
 		}
 		printGameResults(board, players);
