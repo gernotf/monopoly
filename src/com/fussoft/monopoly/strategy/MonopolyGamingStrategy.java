@@ -21,9 +21,9 @@ public abstract class MonopolyGamingStrategy {
 		final Player[] players = new Player[playerCount];
 		initPlayers(players);
 		int round = 1;
-		boolean allPropertiesSold = false;
+		int playersBankrupt = 0;
 
-		while (!allPropertiesSold && (round < MAX_ROUNDS)) {
+		while (!(playersBankrupt == playerCount - 1) && (round < MAX_ROUNDS)) {
 
 			System.out.println("\n++++Starting round " + round);
 
@@ -81,7 +81,10 @@ public abstract class MonopolyGamingStrategy {
 						}
 					}
 				} else {
-					player.setIsBankrupt(payForProperty(board, player, diceValue, boardField));
+					if (!payForProperty(board, player, diceValue, boardField)) {
+						player.setIsBankrupt(true);
+						playersBankrupt++;
+					}
 				}
 
 				player.checkAndBuyHouses(boardField, board.getAllFields());
@@ -92,7 +95,6 @@ public abstract class MonopolyGamingStrategy {
 					playerNumber--;
 				}
 			}
-			//allPropertiesSold = board.checkForAllPropertiesSold();
 			round++;
 		}
 		printGameResults(board, players);
@@ -296,6 +298,16 @@ public abstract class MonopolyGamingStrategy {
 				.filter(field -> field.canBuyHouse() && !foundColorCodes.contains(field.getColorCode()))
 				.peek(field -> foundColorCodes.add(field.getColorCode()))
 				.forEach(field -> System.out.println("Fields of color: '" + field.getColorCode() + "' are all owned by '" + field.getCurrentOwner().getName() + "'."));
+
+		System.out.println();
+		final List<Player> playersNotBankrupt = Arrays.stream(players)
+				.filter(player -> !player.isBankrupt())
+				.collect(Collectors.toList());
+		if (playersNotBankrupt.size() == 1) {
+			System.out.println("AND THE WINNER IS: '" + playersNotBankrupt.get(0)+ "' !!!");
+		}
+
+
 	}
 
 	private List<MonopolyBoardField> getFieldsOwnedByPlayer(Player player, MonopolyBoard board) {
