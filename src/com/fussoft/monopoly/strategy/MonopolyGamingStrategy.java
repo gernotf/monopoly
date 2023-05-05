@@ -87,6 +87,8 @@ public abstract class MonopolyGamingStrategy {
 					}
 				}
 
+				player.tradePropertiesWithOtherPlayers(players, board.getAllFields());
+
 				player.checkAndBuyHouses(boardField, board.getAllFields());
 
 				if (diceValue1 == diceValue2) {

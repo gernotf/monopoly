@@ -4,10 +4,7 @@ package com.fussoft.monopoly;
 import com.fussoft.monopoly.strategy.PlayerStrategy;
 import com.fussoft.monopoly.strategy.PlayerStrategy200;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Player {
@@ -171,6 +168,60 @@ public class Player {
 		}
 
 		return new PropertiesRecord(returnedProperties, moneyFromReturnedProperties);
+	}
+
+
+	public void tradePropertiesWithOtherPlayers(Player[] players, MonopolyBoardField[] allFields) {
+
+		final List<MonopolyBoardField> interestingProperties = findInterestingMissingPropertiesOwnedBySomeoneElse(allFields);
+
+		final List<MonopolyBoardField> deals = interestingProperties.stream()
+				.filter(property -> property.getCurrentOwner().askForProperty(property, this, allFields))
+				.collect(Collectors.toList());
+	}
+
+	private List<MonopolyBoardField> findInterestingMissingPropertiesOwnedBySomeoneElse(MonopolyBoardField[] allFields) {
+
+		final Map<MonopolyBoardField.COLOR_CODE, Integer> colorCodePLayerCountMap = new HashMap<>();
+		final Map<MonopolyBoardField.COLOR_CODE, Integer> colorCodeTotalCountMap = new HashMap<>();
+
+		// get all player fields and save the count of same colorcodes in a map
+		final List<MonopolyBoardField> playersFields = Arrays.stream(allFields)
+				.filter(field -> field.getCurrentOwner() == this)
+				.peek(field -> {
+					if (!colorCodePLayerCountMap.containsKey(field.getColorCode())) {
+						colorCodePLayerCountMap.put(field.getColorCode(), 1);
+						colorCodeTotalCountMap.put(field.getColorCode(), field.getSameColorCount());
+					} else {
+						colorCodePLayerCountMap.put(field.getColorCode(), colorCodePLayerCountMap.get(field.getColorCode()) + 1);
+					}
+				})
+				.collect(Collectors.toList());
+
+		// get all colorcodes of the player's fields, where the player owns all accept one field of that colorcode
+		final List<MonopolyBoardField.COLOR_CODE> interestingColorCodes = colorCodePLayerCountMap.entrySet().stream()
+				.filter(entrySet -> entrySet.getValue().intValue() == (colorCodeTotalCountMap.get(entrySet.getKey()).intValue() - 1))
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toList());
+
+		// get the all fields of the interesting colorcode, which are not owned by this player
+		List<MonopolyBoardField> interestingProperties = Arrays.stream(allFields)
+				.filter(field -> interestingColorCodes.contains(field.getColorCode()))
+				.filter(field -> field.getCurrentOwner() != this)
+				.collect(Collectors.toList());
+
+		if (!interestingProperties.isEmpty()) {
+			System.out.println("Player '" + name + "' is currently interested in the following properties: ");
+			interestingProperties.forEach(field -> System.out.println("\tProperty: '" + field.getName() + "'"));
+		} else {
+			System.out.println("Player '" + name + "' is currently NOT interested in any property: ");
+
+		}
+		return interestingProperties;
+	}
+
+	private boolean askForProperty(MonopolyBoardField property, Player player, MonopolyBoardField[] allFields) {
+		return false;
 	}
 
 	public void checkAndBuyHouses(MonopolyBoardField boardField, MonopolyBoardField[] allFields) {
