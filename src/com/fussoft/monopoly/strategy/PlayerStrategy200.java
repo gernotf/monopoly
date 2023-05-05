@@ -4,7 +4,7 @@ public class PlayerStrategy200 implements PlayerStrategy {
 
     private static final int MIN_HOUSE_PURCHASE_BALANCE = 200;
     @Override
-    public int getMinBalanceForPurchasingAHouse() {
+    public int getMinBalanceForPurchasingAPropertyOrHouse() {
         return MIN_HOUSE_PURCHASE_BALANCE;
     }
 }

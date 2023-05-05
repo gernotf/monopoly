@@ -86,6 +86,10 @@ public class Player {
 		balance -= priceToPay;
 	}
 
+	public void getPayedForProperty(final int moneyToGet) {
+		balance += moneyToGet;
+	}
+
 	public void getPayedRentForProperty(final int paidRent) {
 		balance += paidRent;
 	}
@@ -178,6 +182,15 @@ public class Player {
 		final List<MonopolyBoardField> deals = interestingProperties.stream()
 				.filter(property -> property.getCurrentOwner().askForProperty(property, this, allFields))
 				.collect(Collectors.toList());
+
+		deals.forEach(property -> {
+			if (balance > (property.getValue() - playerStrategy.getMinBalanceForPurchasingAPropertyOrHouse())) {
+				payForProperty(property.getValue());
+				property.getCurrentOwner().getPayedForProperty(property.getValue());
+				property.switchOwner(this, allFields);
+			}
+		});
+
 	}
 
 	private List<MonopolyBoardField> findInterestingMissingPropertiesOwnedBySomeoneElse(MonopolyBoardField[] allFields) {
@@ -220,8 +233,16 @@ public class Player {
 		return interestingProperties;
 	}
 
-	private boolean askForProperty(MonopolyBoardField property, Player player, MonopolyBoardField[] allFields) {
-		return false;
+	private boolean askForProperty(MonopolyBoardField property, Player askingPlayer, MonopolyBoardField[] allFields) {
+
+		final long numberOfColorCodesOfTheAskingPlayer = Arrays.stream(allFields)
+				.filter(field -> field.canBuyHouse())
+				.filter(field -> field.getCurrentOwner() == askingPlayer)
+				.map(MonopolyBoardField::getColorCode)
+				.distinct()
+				.count();
+
+		return (numberOfColorCodesOfTheAskingPlayer < 3);
 	}
 
 	public void checkAndBuyHouses(MonopolyBoardField boardField, MonopolyBoardField[] allFields) {
@@ -270,7 +291,7 @@ public class Player {
 	}
 
 	public int getPlayerMinBalance() {
-		return playerStrategy.getMinBalanceForPurchasingAHouse();
+		return playerStrategy.getMinBalanceForPurchasingAPropertyOrHouse();
 	}
 
 	private int sellHouseFromColorCode(MonopolyBoardField[] allFields, MonopolyBoardField.COLOR_CODE colorCode) {
