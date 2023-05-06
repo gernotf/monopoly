@@ -118,7 +118,7 @@ public class AustraliaBoardField implements MonopolyBoardField {
 			if (currentRent == 0) {
 				currentRent = rentSolo;
 			}
-			if (allFieldsOfColorHaveSameOwner(allFields)) {
+			if (recalculateAllFieldsOfColorHaveSameOwner(allFields)) {
 				setRentToAllColorRentForAllFieldsOfColor(allFields);
 				System.out.println("\t>>>Player '" + currentOwner.getName() + "' now owns all '" + colorCode + "' fields (ex. rent=" + currentRent + ").");
 			} else {
@@ -128,9 +128,13 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		}
 	}
 
-	public boolean canBuyHouse() {
-//		System.out.println("CurrentRent: " + currentRent + ", rentSolo: " + rentSolo);
-		return (currentRent > rentSolo) && (currentRent < rentHotel);
+	@Override
+	public boolean isSameOwnerForAllFieldsOfTheSameColor() {
+		return currentRent > rentSolo;
+	}
+
+	public boolean canBuyAHouse() {
+		return isSameOwnerForAllFieldsOfTheSameColor() && (currentRent < rentHotel);
 	}
 
 	public void buyHouseOrHotel() {
@@ -190,7 +194,7 @@ public class AustraliaBoardField implements MonopolyBoardField {
 		currentRent = rentAllColor;
 	}
 
-	public boolean allFieldsOfColorHaveSameOwner(MonopolyBoardField[] fields) {
+	public boolean recalculateAllFieldsOfColorHaveSameOwner(MonopolyBoardField[] fields) {
 		return Arrays.stream(fields)
 				.filter(field ->
 						(field.getCurrentOwner() == currentOwner)

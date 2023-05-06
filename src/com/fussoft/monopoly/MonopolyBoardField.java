@@ -35,9 +35,11 @@ public interface MonopolyBoardField {
 
 	void setCurrentRentToAllColor();
 
-	boolean allFieldsOfColorHaveSameOwner(MonopolyBoardField[] fields);
+	boolean recalculateAllFieldsOfColorHaveSameOwner(MonopolyBoardField[] fields);
 
-	boolean canBuyHouse();
+	boolean isSameOwnerForAllFieldsOfTheSameColor();
+
+	boolean canBuyAHouse();
 
 	void buyHouseOrHotel();
 

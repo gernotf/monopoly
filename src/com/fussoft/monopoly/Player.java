@@ -240,7 +240,7 @@ public class Player {
 	private boolean askForProperty(MonopolyBoardField property, Player askingPlayer, MonopolyBoardField[] allFields) {
 
 		final long numberOfColorCodesOfTheAskingPlayer = Arrays.stream(allFields)
-				.filter(MonopolyBoardField::canBuyHouse)
+				.filter(MonopolyBoardField::isSameOwnerForAllFieldsOfTheSameColor)
 				.filter(field -> field.getCurrentOwner() == askingPlayer)
 				.map(MonopolyBoardField::getColorCode)
 				.distinct()
@@ -264,7 +264,7 @@ public class Player {
 
 		final MonopolyBoardField.COLOR_CODE colorCodeWithMostHousesAndMostExpensiveHousePrice = Arrays.stream(allFields)
 				.filter(field -> field.getCurrentOwner() == this)
-				.filter(MonopolyBoardField::canBuyHouse)
+				.filter(MonopolyBoardField::canBuyAHouse)
 				.filter(field -> field.getPriceHouseAndHotel() <= moneyToSpentOnBuying)
 				.sorted(Comparator.comparingInt(MonopolyBoardField::getNumberOfHouses).reversed())
 				.max(Comparator.comparingInt(MonopolyBoardField::getPriceHouseAndHotel))

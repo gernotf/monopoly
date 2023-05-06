@@ -295,7 +295,7 @@ public abstract class MonopolyGamingStrategy {
 		System.out.println();
 		final List<MonopolyBoardField.COLOR_CODE> foundColorCodes = new ArrayList<>();
 		Arrays.stream(board.getAllFields())
-				.filter(field -> field.canBuyHouse() && !foundColorCodes.contains(field.getColorCode()))
+				.filter(field -> field.canBuyAHouse() && !foundColorCodes.contains(field.getColorCode()))
 				.peek(field -> foundColorCodes.add(field.getColorCode()))
 				.forEach(field -> System.out.println("Fields of color: '" + field.getColorCode() + "' are all owned by '" + field.getCurrentOwner().getName() + "'."));
 
