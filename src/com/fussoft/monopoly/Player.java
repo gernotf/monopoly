@@ -181,7 +181,7 @@ public class Player {
 
 		final List<MonopolyBoardField> deals = interestingProperties.stream()
 				.filter(property -> property.getCurrentOwner().askForProperty(property, this, allFields))
-				.peek(property -> System.out.println("\tPlayer '" + property.getCurrentOwner().getName() + "' gives consent to player '" + name + "' for dealing their property '" + property.getName() + "'."))
+				.peek(property -> System.out.println("\t\tPlayer '" + property.getCurrentOwner().getName() + "' gives consent to player '" + name + "' for dealing their property '" + property.getName() + "'."))
 				.collect(Collectors.toList());
 
 		deals.forEach(property -> {
@@ -258,7 +258,7 @@ public class Player {
 	private boolean checkAndBuyNextHouse(MonopolyBoardField[] allFields) {
 		final int moneyToSpentOnBuying = balance - getPlayerMinBalance();
 		if (moneyToSpentOnBuying < MonopolyBoard.MIN_PRICE_FOR_A_HOUSE) {
-			System.out.println("Player '" + name + "'(" + balance + ") does not have enough money to buy a house.");
+			System.out.println("\tPlayer '" + name + "'(" + balance + ") does not have enough money to buy a house.");
 			return false;
 		}
 
@@ -272,11 +272,11 @@ public class Player {
 				.orElse(null);
 
 		if (colorCodeWithMostHousesAndMostExpensiveHousePrice == null) {
-			System.out.println("Player '" + name + "'(" + balance + ") does not have a property (or enough money) to buy a house for.");
+			System.out.println("\tPlayer '" + name + "'(" + balance + ") does not have a property (or enough money) to buy a house for.");
 			return false;
 		}
 
-		System.out.println("Player '" + name + "'(" + balance + ") will buy a house (or hotel) for property with color '" + colorCodeWithMostHousesAndMostExpensiveHousePrice.name() + "'.");
+		System.out.println("\tPlayer '" + name + "'(" + balance + ") will buy a house (or hotel) for property with color '" + colorCodeWithMostHousesAndMostExpensiveHousePrice.name() + "'.");
 		final MonopolyBoardField fieldToBuyHouseFor = Arrays.stream(allFields)
 				.filter(field -> field.getColorCode() == colorCodeWithMostHousesAndMostExpensiveHousePrice)
 				.min(Comparator.comparingInt(MonopolyBoardField::getNumberOfHouses))
@@ -287,7 +287,7 @@ public class Player {
 			return false;
 		}
 
-		System.out.println("Player '" + name + "'(" + balance + ") buys a house (or hotel) for property '" + fieldToBuyHouseFor.getName() + "'(price:" + fieldToBuyHouseFor.getPriceHouseAndHotel() + ").");
+		System.out.println("\t\tPlayer '" + name + "'(" + balance + ") buys a house (or hotel) for property '" + fieldToBuyHouseFor.getName() + "'(price:" + fieldToBuyHouseFor.getPriceHouseAndHotel() + ").");
 		payHouseOrHotelForProperty(fieldToBuyHouseFor);
 		fieldToBuyHouseFor.buyHouseOrHotel();
 
