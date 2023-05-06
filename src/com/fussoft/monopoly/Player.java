@@ -176,7 +176,6 @@ public class Player {
 
 	public void tradePropertiesWithOtherPlayers(Player[] players, MonopolyBoardField[] allFields) {
 
-
 		System.out.println("Player '" + name + "' starts trading properties.");
 		final List<MonopolyBoardField> interestingProperties = findInterestingMissingPropertiesOwnedBySomeoneElse(allFields);
 
@@ -273,7 +272,7 @@ public class Player {
 				.orElse(null);
 
 		if (colorCodeWithMostHousesAndMostExpensiveHousePrice == null) {
-			System.out.println("Player '" + name + "'(" + balance + ") does not have a property to buy a house for.");
+			System.out.println("Player '" + name + "'(" + balance + ") does not have a property (or enough money) to buy a house for.");
 			return false;
 		}
 
