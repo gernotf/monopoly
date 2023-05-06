@@ -87,14 +87,14 @@ public abstract class MonopolyGamingStrategy {
 					}
 				}
 
-				player.tradePropertiesWithOtherPlayers(players, board.getAllFields());
-
-				player.checkAndBuyHouses(boardField, board.getAllFields());
-
-				if (diceValue1 == diceValue2) {
-					// current player rolled a double and has another turn
-					System.out.println("Player '" + player.getName() + "' rolled a double and has another turn.");
-					playerNumber--;
+				if (!player.isBankrupt()) {
+					player.tradePropertiesWithOtherPlayers(players, board.getAllFields());
+					player.checkAndBuyHouses(boardField, board.getAllFields());
+					if (diceValue1 == diceValue2) {
+						// current player rolled a double and has another turn
+						System.out.println("Player '" + player.getName() + "' rolled a double and has another turn.");
+						playerNumber--;
+					}
 				}
 			}
 			round++;
@@ -105,35 +105,30 @@ public abstract class MonopolyGamingStrategy {
 	private boolean payForProperty(MonopolyBoard board, Player player, int diceValue, MonopolyBoardField boardField) {
 		boolean isPayerBankrupt = false;
 		final int currentRent = boardField.getCurrentRent(diceValue, board.getAllFields());
-		if (currentRent <= player.getBalance() - getMinBalance()) {
-			player.payRentForProperty(currentRent);
-			boardField.getCurrentOwner().getPayedRentForProperty(currentRent);
-			System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + currentRent + ")");
-		} else {
-			final int remainingPaymentHouses = currentRent - player.getBalance();
+		System.out.println("Player '" + player.getName() + "' has to pay rent to Player '" + boardField.getCurrentOwner().getName() + "' for property '" + boardField.getName() + "' ($" + currentRent + ").");
+		// pay with the cash the owing player has
+		final int paymentAmountCash = Math.min(currentRent, player.getBalance());
+		player.payRentForProperty(paymentAmountCash);
+		boardField.getCurrentOwner().getPayedRentForProperty(paymentAmountCash);
+		System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "': " + paymentAmountCash + ".");
+		if (currentRent > paymentAmountCash) {
+			final int remainingPaymentHouses = currentRent - paymentAmountCash;
 			final int gainFromSoldHouses = player.sellHouses(remainingPaymentHouses, board.getAllFields());
-			if (gainFromSoldHouses >= remainingPaymentHouses) {
-				player.payRentForProperty(currentRent);
-				boardField.getCurrentOwner().getPayedRentForProperty(currentRent);
-				System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") sold houses and payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + currentRent + ")");
-			} else {
+			final int paymentAmountHouses = Math.min(remainingPaymentHouses, player.getBalance());
+			player.payRentForProperty(paymentAmountHouses);
+			boardField.getCurrentOwner().getPayedRentForProperty(paymentAmountHouses);
+			System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") sold houses and payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "': " + paymentAmountHouses + ".");
+			if (gainFromSoldHouses < remainingPaymentHouses) {
 				final int remainingPaymentProperties = remainingPaymentHouses - gainFromSoldHouses;
 				final PropertiesRecord propertiesRecord = player.provideProperties(remainingPaymentProperties, board.getAllFields());
-				if (propertiesRecord.getSumPrice() >= remainingPaymentProperties) {
-					// paying the remaining cash
-					final int remainingCashToPay = currentRent - propertiesRecord.getSumPrice();
-					player.payRentForProperty(remainingCashToPay);
-					boardField.getCurrentOwner().getPayedRentForProperty(remainingCashToPay);
-					// paying player may pay more with the sum of the value of the provided properties - the payee doesn't pay back the change!
-					propertiesRecord.getProperties()
-							.forEach(property -> property.switchOwner(boardField.getCurrentOwner(), board.getAllFields()));
-					System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") sold houses, handed properties and payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "'(" + currentRent + ")");
-				} else {
+				propertiesRecord.getProperties()
+						.forEach(property -> property.switchOwner(boardField.getCurrentOwner(), board.getAllFields()));
+				System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") sold houses, handed properties and payed to owner '" + boardField.getCurrentOwner().getName() + "'(" + boardField.getCurrentOwner().getBalance() + ") for property '" + boardField.getName() + "':" + (paymentAmountCash+paymentAmountHouses) + ".");
+				if (propertiesRecord.getSumPrice() < remainingPaymentProperties) {
 					// player has sold all houses and properties and is still unable to pay the rent - the player is bankrupt
 					isPayerBankrupt = true;
 					System.out.println("Player '" + player.getName() + "'(" + player.getBalance() + ") is bankrupt and unable to pay the current rent of " + currentRent + ". Sold houses for " + gainFromSoldHouses + ", and handed over " + propertiesRecord.getProperties().size() + " properties of value " + propertiesRecord.getSumPrice() + ".");
 				}
-
 			}
 		}
 		return isPayerBankrupt;

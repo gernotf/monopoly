@@ -189,8 +189,8 @@ public class Player {
 			if (balance > (property.getValue() - playerStrategy.getMinBalanceForPurchasingAPropertyOrHouse())) {
 				payForProperty(property.getValue());
 				property.getCurrentOwner().getPayedForProperty(property.getValue());
-				property.switchOwner(this, allFields);
 				System.out.println("\tPlayer '" + property.getCurrentOwner().getName() + "' sold property '" + property.getName() + "' to player '" + name + "'.");
+				property.switchOwner(this, allFields);
 			}
 		});
 	}
@@ -227,12 +227,12 @@ public class Player {
 		// get the all fields of the interesting colorcode, which are not owned by this player
 		List<MonopolyBoardField> interestingProperties = Arrays.stream(allFields)
 				.filter(field -> interestingColorCodes.contains(field.getColorCode()))
-				.filter(field -> field.getCurrentOwner() != this)
+				.filter(field -> field.getCurrentOwner()!=null && field.getCurrentOwner()!=this)
 				.peek(field -> System.out.println("\t\tProperty: '" + field.getName() + "'"))
 				.collect(Collectors.toList());
 
 		if (interestingProperties.isEmpty()) {
-			System.out.println("\tPlayer '" + name + "' is currently NOT interested in any property: ");
+			System.out.println("\tPlayer '" + name + "' is currently NOT interested in any property.");
 
 		}
 		return interestingProperties;
