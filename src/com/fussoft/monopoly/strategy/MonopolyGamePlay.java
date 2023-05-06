@@ -8,13 +8,13 @@ import com.fussoft.monopoly.PropertiesRecord;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MonopolyGamingStrategy {
+public class MonopolyGamePlay {
 
 	static final Random random = new Random();
 
 	static final int MAX_ROUNDS = 100;
 
-	public MonopolyGamingStrategy() {
+	public MonopolyGamePlay() {
 
 	}
 	public void playGame(final MonopolyBoard board, final int playerCount) {
@@ -305,8 +305,6 @@ public class MonopolyGamingStrategy {
 		if (playersNotBankrupt.size() == 1) {
 			System.out.println("AND THE WINNER IS: '" + playersNotBankrupt.get(0).getName() + "' !!!");
 		}
-
-
 	}
 
 	private List<MonopolyBoardField> getFieldsOwnedByPlayer(Player player, MonopolyBoard board) {
@@ -315,7 +313,7 @@ public class MonopolyGamingStrategy {
 				.collect(Collectors.toList());
 	}
 
-	class AuctionResult {
+	static class AuctionResult {
 
 		Player chosenPlayer;
 		int priceToPay;
