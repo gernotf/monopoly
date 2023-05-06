@@ -8,15 +8,15 @@ import com.fussoft.monopoly.PropertiesRecord;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class MonopolyGamingStrategy {
+public class MonopolyGamingStrategy {
 
 	static final Random random = new Random();
 
 	static final int MAX_ROUNDS = 100;
 
-	abstract int getMinBalance();
+	public MonopolyGamingStrategy() {
 
-
+	}
 	public void playGame(final MonopolyBoard board, final int playerCount) {
 		final Player[] players = new Player[playerCount];
 		initPlayers(players);
@@ -68,7 +68,7 @@ public abstract class MonopolyGamingStrategy {
 					continue;
 				}
 				if (boardField.isAvailableForPurchase()) {
-					if (player.getBalance() - boardField.getValue() >= getMinBalance()) {
+					if (player.getBalance() - boardField.getValue() >= player.getMinBalanceForPurchasingAProperty()) {
 						boardField.setNewOwner(player, boardField.getValue(), board.getAllFields(), round);
 						System.out.println("Field '" + boardField.getName() + "'(" + boardField.getValue() + ") was purchased by '" + player.getName() + "', remaining balance: " + player.getBalance());
 					} else {
@@ -189,7 +189,7 @@ public abstract class MonopolyGamingStrategy {
 						|| ((colorCodePlayers.get(0) == colorCodePlayers.get(1)) && (colorCodePlayers.get(0) == colorCodePlayers.get(2)))))
 				) {
 					Player chosenPlayer = colorCodePlayers.get(0);
-					if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
+					if (chosenPlayer.getBalance() - priceStrategy >= chosenPlayer.getMinBalanceForAuctionAProperty()) {
 						auctionResult = new AuctionResult(chosenPlayer, priceStrategy);
 						System.out.println("Chosen player for Airport (4, 1/2/3): '" + chosenPlayer.getName() + "'.");
 					}
@@ -197,7 +197,7 @@ public abstract class MonopolyGamingStrategy {
 						&& (colorCodePlayers.get(0) == colorCodePlayers.get(2) || colorCodePlayers.get(1) == colorCodePlayers.get(2))
 				) {
 					Player chosenPlayer = colorCodePlayers.get(2);
-					if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
+					if (chosenPlayer.getBalance() - priceStrategy >= chosenPlayer.getMinBalanceForAuctionAProperty()) {
 						auctionResult = new AuctionResult(chosenPlayer, priceStrategy);
 						System.out.println("Chosen player for Airport (4, 1/3 or 2/3): '" + chosenPlayer.getName() + "'.");
 					}
@@ -206,7 +206,7 @@ public abstract class MonopolyGamingStrategy {
 			if (boardField.getSameColorCount() == 2) {
 				// there can only be one player with a property of that color - it's the chosen one
 				Player chosenPlayer = colorCodePlayers.get(0);
-				if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
+				if (chosenPlayer.getBalance() - priceStrategy >= chosenPlayer.getMinBalanceForAuctionAProperty()) {
 					auctionResult = new AuctionResult(chosenPlayer, priceStrategy);
 					System.out.println("Chosen player by similar color (2): '" + chosenPlayer.getName() + "'.");
 				}
@@ -215,7 +215,7 @@ public abstract class MonopolyGamingStrategy {
 				if (colorCodePlayers.size() == 1) {
 					// only one player owns a property of that color - it's the chosen one
 					Player chosenPlayer = colorCodePlayers.get(0);
-					if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
+					if (chosenPlayer.getBalance() - priceStrategy >= chosenPlayer.getMinBalanceForAuctionAProperty()) {
 						auctionResult = new AuctionResult(chosenPlayer, priceStrategy);
 						System.out.println("Chosen player by similar color (3, 1): '" + chosenPlayer.getName() + "'.");
 					}
@@ -223,7 +223,7 @@ public abstract class MonopolyGamingStrategy {
 					if (colorCodePlayers.get(0) == colorCodePlayers.get(1)) {
 						// same owner - it's the chosen one
 						Player chosenPlayer = colorCodePlayers.get(0);
-						if (chosenPlayer.getBalance() - priceStrategy >= getMinBalance()) {
+						if (chosenPlayer.getBalance() - priceStrategy >= chosenPlayer.getMinBalanceForAuctionAProperty()) {
 							auctionResult = new AuctionResult(chosenPlayer, priceStrategy);
 							System.out.println("Chosen player by similar color (3, 2): '" + chosenPlayer.getName() + "'.");
 						}
@@ -250,7 +250,7 @@ public abstract class MonopolyGamingStrategy {
 
 		final Player chosenPlayer = playerPropertiesCount.entrySet()
 				.stream()
-				.filter(entrySet -> entrySet.getKey().getBalance() - priceStrategy >= getMinBalance())
+				.filter(entrySet -> entrySet.getKey().getBalance() - priceStrategy >= entrySet.getKey().getMinBalanceForAuctionAProperty())
 				.min(Map.Entry.comparingByValue())
 				.map(Map.Entry::getKey)
 				.orElse(null);
@@ -268,10 +268,9 @@ public abstract class MonopolyGamingStrategy {
 		final int priceStrategy = boardField.getValue() / 2;
 
 		final Player playerWithLeastBalanceAbovePriceStrategy =  Arrays.stream(players)
-				.filter(player -> player.getBalance() - priceStrategy >= getMinBalance())
+				.filter(player -> player.getBalance() - priceStrategy >= player.getMinBalanceForAuctionAProperty())
 				.min(Comparator.comparingInt(Player::getBalance))
 				.orElse(null);
-
 
 		AuctionResult auctionResult = null;
 		if (playerWithLeastBalanceAbovePriceStrategy != null) {

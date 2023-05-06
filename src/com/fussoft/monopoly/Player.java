@@ -110,6 +110,18 @@ public class Player {
 		balance -= field.getPriceHouseAndHotel();
 	}
 
+	public int getMinBalanceForPurchasingAProperty() {
+		return playerStrategy.getMinBalanceForPurchasingAProperty();
+	}
+
+	public int getMinBalanceForAuctionAProperty() {
+		return playerStrategy.getMinBalanceForAuctionAProperty();
+	}
+
+	public int getMinBalanceForPurchasingAHouse() {
+		return playerStrategy.getMinBalanceForPurchasingAHouse();
+	}
+
 	/**
 	 *
 	 * @param remainingPayment Debt to be paid be selling houses.

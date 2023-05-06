@@ -2,5 +2,7 @@ package com.fussoft.monopoly.strategy;
 
 public interface PlayerStrategy {
 
-    int getMinBalanceForPurchasingAPropertyOrHouse();
+    int getMinBalanceForPurchasingAProperty();
+    int getMinBalanceForAuctionAProperty();
+    int getMinBalanceForPurchasingAHouse();
 }
