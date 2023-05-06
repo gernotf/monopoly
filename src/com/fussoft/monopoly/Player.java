@@ -106,9 +106,8 @@ public class Player {
 		return isBankrupt;
 	}
 
-	public int payHouseOrHotelForProperty(final MonopolyBoardField field) {
+	public void payHouseOrHotelForProperty(final MonopolyBoardField field) {
 		balance -= field.getPriceHouseAndHotel();
-		return balance;
 	}
 
 	/**
@@ -177,10 +176,13 @@ public class Player {
 
 	public void tradePropertiesWithOtherPlayers(Player[] players, MonopolyBoardField[] allFields) {
 
+
+		System.out.println("Player '" + name + "' starts trading properties.");
 		final List<MonopolyBoardField> interestingProperties = findInterestingMissingPropertiesOwnedBySomeoneElse(allFields);
 
 		final List<MonopolyBoardField> deals = interestingProperties.stream()
 				.filter(property -> property.getCurrentOwner().askForProperty(property, this, allFields))
+				.peek(property -> System.out.println("\tPlayer '" + property.getCurrentOwner().getName() + "' gives consent to player '" + name + "' for dealing their property '" + property.getName() + "'."))
 				.collect(Collectors.toList());
 
 		deals.forEach(property -> {
@@ -188,9 +190,9 @@ public class Player {
 				payForProperty(property.getValue());
 				property.getCurrentOwner().getPayedForProperty(property.getValue());
 				property.switchOwner(this, allFields);
+				System.out.println("\tPlayer '" + property.getCurrentOwner().getName() + "' sold property '" + property.getName() + "' to player '" + name + "'.");
 			}
 		});
-
 	}
 
 	private List<MonopolyBoardField> findInterestingMissingPropertiesOwnedBySomeoneElse(MonopolyBoardField[] allFields) {
@@ -211,23 +213,26 @@ public class Player {
 				})
 				.collect(Collectors.toList());
 
+		System.out.println("\tPlayer '" + name + "' has " + playersFields.size() + " properties.");
+		System.out.println("\t...out of these, these colorCodes are interesting:");
+
 		// get all colorcodes of the player's fields, where the player owns all accept one field of that colorcode
 		final List<MonopolyBoardField.COLOR_CODE> interestingColorCodes = colorCodePLayerCountMap.entrySet().stream()
-				.filter(entrySet -> entrySet.getValue().intValue() == (colorCodeTotalCountMap.get(entrySet.getKey()).intValue() - 1))
+				.filter(entrySet -> entrySet.getValue() == (colorCodeTotalCountMap.get(entrySet.getKey()) - 1))
 				.map(Map.Entry::getKey)
+				.peek(colorCode -> System.out.println("\t\tColorCode:" + colorCode.name()))
 				.collect(Collectors.toList());
 
+		System.out.println("\t...and finally these properties are interesting:");
 		// get the all fields of the interesting colorcode, which are not owned by this player
 		List<MonopolyBoardField> interestingProperties = Arrays.stream(allFields)
 				.filter(field -> interestingColorCodes.contains(field.getColorCode()))
 				.filter(field -> field.getCurrentOwner() != this)
+				.peek(field -> System.out.println("\t\tProperty: '" + field.getName() + "'"))
 				.collect(Collectors.toList());
 
-		if (!interestingProperties.isEmpty()) {
-			System.out.println("Player '" + name + "' is currently interested in the following properties: ");
-			interestingProperties.forEach(field -> System.out.println("\tProperty: '" + field.getName() + "'"));
-		} else {
-			System.out.println("Player '" + name + "' is currently NOT interested in any property: ");
+		if (interestingProperties.isEmpty()) {
+			System.out.println("\tPlayer '" + name + "' is currently NOT interested in any property: ");
 
 		}
 		return interestingProperties;
@@ -236,7 +241,7 @@ public class Player {
 	private boolean askForProperty(MonopolyBoardField property, Player askingPlayer, MonopolyBoardField[] allFields) {
 
 		final long numberOfColorCodesOfTheAskingPlayer = Arrays.stream(allFields)
-				.filter(field -> field.canBuyHouse())
+				.filter(MonopolyBoardField::canBuyHouse)
 				.filter(field -> field.getCurrentOwner() == askingPlayer)
 				.map(MonopolyBoardField::getColorCode)
 				.distinct()
